@@ -1,7 +1,9 @@
 Exit code: 0
-Wall time: 1.2 seconds
+Wall time: 1.1 seconds
 Output:
-from main import build_pick_ownership, estimate_pick_quality
+import asyncio
+
+from main import build_pick_ownership, estimate_pick_quality, fetch_league_chain
 
 
 def test_pick_ownership_uses_explicit_seasons_and_rounds():
@@ -36,4 +38,18 @@ def test_pick_quality_does_not_infer_from_age_preseason():
 def test_pick_quality_uses_measured_record_in_season():
     assert estimate_pick_quality({"standings": {"wins": 7, "losses": 2}}) == "late"
     assert estimate_pick_quality({"standings": {"wins": 2, "losses": 7}}) == "early"
+
+
+def test_league_chain_stops_at_zero(monkeypatch):
+    leagues = {
+        "new": {"league_id": "new", "season": "2026", "previous_league_id": "old"},
+        "old": {"league_id": "old", "season": "2025", "previous_league_id": "0"},
+    }
+
+    async def fake_get_json(client, url):
+        return leagues[url.rsplit("/", 1)[-1]]
+
+    monkeypatch.setattr("main.get_json", fake_get_json)
+    result = asyncio.run(fetch_league_chain(object(), "new"))
+    assert [league["season"] for league in result] == ["2026", "2025"]
 
