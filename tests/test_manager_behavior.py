@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.2 seconds
-Output:
 from manager_behavior import build_manager_profiles
 
 
