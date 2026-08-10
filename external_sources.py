@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 """Public-source adapters. Parsers are separate from network access for testing."""
 import json
 import re
