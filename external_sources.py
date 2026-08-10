@@ -4,6 +4,7 @@ Output:
 """Public-source adapters. Parsers are separate from network access for testing."""
 import json
 import re
+import asyncio
 from datetime import datetime, timezone
 
 import httpx
@@ -16,6 +17,8 @@ SOS_URLS = {
     "weeks_1_17": "https://fftoolbox.fulltimefantasy.com/football/strength_of_schedule.cfm?type=e",
 }
 HEADERS = {"User-Agent": "dynasty-intelligence/0.1 (+public fantasy data adapter)"}
+_CACHE = {"payload": None, "fetched_at": None}
+CACHE_SECONDS = 6 * 60 * 60
 
 
 def parse_ktc(html: str, superflex: bool = True) -> list[dict]:
@@ -98,14 +101,35 @@ def parse_sos(html: str) -> list[dict]:
     } for row in rows]
 
 
-async def fetch_external_context() -> dict:
+async def _fetch_with_retry(client, url, attempts=3):
+    last_error = None
+    for attempt in range(attempts):
+        try:
+            response = await client.get(url)
+            response.raise_for_status()
+            return response
+        except Exception as exc:
+            last_error = exc
+            if attempt + 1 < attempts:
+                await asyncio.sleep(0.25 * (2 ** attempt))
+    raise last_error
+
+
+async def fetch_external_context(force=False) -> dict:
+    now = datetime.now(timezone.utc)
+    if (
+        not force and _CACHE["payload"] is not None and _CACHE["fetched_at"] is not None
+        and (now - _CACHE["fetched_at"]).total_seconds() < CACHE_SECONDS
+    ):
+        return {**_CACHE["payload"], "cache": {"status": "hit",
+                "fetched_at": _CACHE["fetched_at"].isoformat()}}
     urls = [KTC_URL, OL_URL, *SOS_URLS.values()]
     async with httpx.AsyncClient(follow_redirects=True, headers=HEADERS, timeout=60.0) as client:
         responses = await __import__("asyncio").gather(
-            *[client.get(url) for url in urls], return_exceptions=True
+            *[_fetch_with_retry(client, url) for url in urls], return_exceptions=True
         )
 
-    payload = {"updated_at": datetime.now(timezone.utc).isoformat(), "sources": {}}
+    payload = {"updated_at": now.isoformat(), "sources": {}}
     parsers = [
         ("ktc", KTC_URL, parse_ktc),
         ("offensive_lines", OL_URL, parse_offensive_lines),
@@ -125,5 +149,17 @@ async def fetch_external_context() -> dict:
             payload["sources"][name] = {
                 "status": "unavailable", "url": url, "error": str(exc), "data": []
             }
+    successful = sum(source["status"] == "ok" for source in payload["sources"].values())
+    payload["coverage"] = {"successful_sources": successful, "total_sources": 4}
+    if successful:
+        _CACHE.update({"payload": payload, "fetched_at": now})
+        payload["cache"] = {"status": "miss", "fetched_at": now.isoformat()}
+        return payload
+    if _CACHE["payload"] is not None:
+        stale = {**_CACHE["payload"]}
+        stale["cache"] = {"status": "stale_fallback",
+                          "fetched_at": _CACHE["fetched_at"].isoformat()}
+        return stale
+    payload["cache"] = {"status": "unavailable", "fetched_at": None}
     return payload
 
