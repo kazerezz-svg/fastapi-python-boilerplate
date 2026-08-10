@@ -1,28 +1,71 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Ffastapi&demo-title=FastAPI&demo-description=Use%20FastAPI%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-fastapi.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
+Exit code: 0
+Wall time: 1.1 seconds
+Output:
+# Sleeper Dynasty Intelligence
 
-# FastAPI + Vercel
+FastAPI service for league 1337530303182290944 that combines live Sleeper
+state, linked-season transaction history, KeepTradeCut market benchmarks,
+4for4 offensive-line projections, and FFToolbox positional strength of
+schedule.
 
-This example shows how to use FastAPI on Vercel with Serverless Functions using the [Python Runtime](https://vercel.com/docs/concepts/functions/serverless-functions/runtimes/python).
+## Capabilities
 
-## Demo
+- Live rosters, starters, bench, taxi, reserve, managers, and traded picks
+- Historical transactions across Sleeper's previous_league_id chain
+- KTC, offensive-line, and Weeks 1-13/1-17 SOS context for every player
+- League-relative roster and lineup analysis
+- Historical manager trade tendencies
+- Bounded trade-package generation and player recommendations
+- Scheduled JSON snapshots for persistent analysis
 
-https://vercel-plus-fastapi.vercel.app/
+## Important endpoints
 
-## How it Works
+- /league-map - normalized current league
+- /history - linked-season completed transactions
+- /external-context - KTC, 4for4, and SOS with freshness/status
+- /analysis/league - enriched league-relative analysis
+- /analysis/player/{sleeper_player_id} - complete player context
+- /manager-behavior - measured historical manager tendencies
+- /trade-search/{sleeper_player_id} - ranked packages
+- /recommendation/player/{sleeper_player_id} - direct offer guidance
 
-This example uses the Asynchronous Server Gateway Interface (ASGI) with FastAPI to enable handling requests on Vercel with Serverless Functions.
+Interactive OpenAPI documentation is available at /docs.
 
-## Running Locally
+## Configuration
 
-```bash
-npm i -g vercel
-vercel dev
-```
+Copy .env.example to .env for local development.
 
-Your FastAPI application is now available at `http://localhost:3000`.
+| Variable | Required | Purpose |
+| --- | --- | --- |
+| SLEEPER_LEAGUE_ID | No | Defaults to the configured league |
+| SLEEPER_USER_ID | No | Defaults to the configured manager |
+| PROJECTIONS_URL | No | Authorized JSON projection feed |
+| API_BASE_URL | For snapshots | Deployed API URL used by GitHub Actions |
 
-## One-Click Deploy
+Projection JSON may be a list or an object with a players list. Each row accepts
+player_id (preferred), name, and projected_points. Competitive-window
+classification remains unavailable until at least 70% of starters match.
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=vercel-examples):
+## Local development
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fexamples%2Ftree%2Fmain%2Fpython%2Ffastapi&demo-title=FastAPI&demo-description=Use%20FastAPI%20on%20Vercel%20with%20Serverless%20Functions%20using%20the%20Python%20Runtime.&demo-url=https%3A%2F%2Fvercel-plus-fastapi.vercel.app%2F&demo-image=https://assets.vercel.com/image/upload/v1669994600/random/python.png)
+~~~powershell
+python -m venv .venv
+.\.venv\Scripts\python -m pip install -e . --group dev
+.\.venv\Scripts\python -m pytest -q
+.\.venv\Scripts\uvicorn main:app --reload
+~~~
+
+## Snapshots
+
+scripts/refresh_snapshot.py fetches the league, history, and external context
+and atomically writes snapshots/latest.json. The refresh-snapshot.yml workflow
+runs every six hours after the repository secret API_BASE_URL is configured.
+
+## Methodology boundaries
+
+- KTC is a crowdsourced market benchmark, not a projection or decision rule.
+- Pick values use a labeled neutral-mid benchmark when quality is unknown.
+- Manager tendencies are descriptive and receive only a limited score adjustment.
+- Lineup impact currently uses optimized KTC market value.
+- Every sourced or heuristic field is labeled in API responses.
+
