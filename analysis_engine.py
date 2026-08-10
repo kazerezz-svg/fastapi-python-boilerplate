@@ -140,6 +140,13 @@ def _rank(teams, metric):
         team["analysis"]["league_relative"][f"{metric}_rank"] = rank
 
 
+def _rank_score(rank, team_count):
+    """Convert league rank to a 0-100 score without pretending it is a forecast."""
+    if team_count <= 1:
+        return 100.0
+    return round(100 * (team_count - rank) / (team_count - 1), 1)
+
+
 def build_league_analysis(league_map, context, projections=None):
     indexes = build_external_indexes(context)
     projection_indexes = build_projection_indexes(projections or {})
@@ -167,23 +174,58 @@ def build_league_analysis(league_map, context, projections=None):
         )
         window = team["analysis"]["competitive_window"]
         window["projection_coverage"] = round(coverage, 3)
-        if coverage < 0.7:
-            continue
-        production_rank = team["analysis"]["league_relative"][
-            "projected_starter_points_rank"
+        relative = team["analysis"]["league_relative"]
+        has_projections = coverage >= 0.7
+        production_rank = relative[
+            "projected_starter_points_rank" if has_projections
+            else "ktc_starter_value_rank"
         ]
         market_rank = team["analysis"]["league_relative"]["ktc_starter_value_rank"]
-        if production_rank <= playoff_slots and market_rank <= max(1, team_count // 2):
+        total_value_rank = relative["ktc_total_player_value_rank"]
+        firsts_rank = relative["future_first_count_rank"]
+        current_score = round(
+            0.65 * _rank_score(production_rank, team_count)
+            + 0.25 * _rank_score(market_rank, team_count)
+            + 0.10 * _rank_score(total_value_rank, team_count),
+            1,
+        )
+        future_score = round(
+            0.70 * _rank_score(total_value_rank, team_count)
+            + 0.30 * _rank_score(firsts_rank, team_count),
+            1,
+        )
+        if current_score >= 70:
             classification = "contender"
-        elif production_rank > playoff_slots and market_rank > max(1, team_count // 2):
-            classification = "rebuild_candidate"
+        elif current_score >= 52:
+            classification = "playoff_bubble"
+        elif current_score >= 32 or future_score >= 55:
+            classification = "retooling"
         else:
-            classification = "retooling_or_fringe"
+            classification = "rebuild_candidate"
         window.update({
             "classification": classification,
-            "reason": "league-relative projected starter points plus starter market value",
+            "current_strength_score": current_score,
+            "future_strength_score": future_score,
+            "power_rank": None,
+            "confidence": "medium" if has_projections else "low",
+            "production_basis": (
+                "configured projected starter points" if has_projections
+                else "KTC starter market value proxy"
+            ),
+            "reason": (
+                "League-relative current strength blends production, starter quality, "
+                "and roster depth. When projections are unavailable, starter market "
+                "value is used as a clearly labeled low-confidence proxy."
+            ),
             "heuristic": True,
         })
+    ordered_strength = sorted(
+        teams,
+        key=lambda team: team["analysis"]["competitive_window"]["current_strength_score"],
+        reverse=True,
+    )
+    for power_rank, team in enumerate(ordered_strength, 1):
+        team["analysis"]["competitive_window"]["power_rank"] = power_rank
     return {
         "updated_at": league_map.get("updated_at"),
         "league_id": league_map.get("league_id"),
@@ -193,10 +235,10 @@ def build_league_analysis(league_map, context, projections=None):
             "sourced_context": ["4for4 offensive line", "FFToolbox SOS W1-13/W1-17"],
             "projection_source_status": (projections or {}).get("status", "not_configured"),
             "window_rule": (
-                "Requires >=70% starter projection coverage; combines league-relative "
-                "projected starter points and KTC starter value."
+                "Current strength is 65% production signal, 25% starter market value, "
+                "and 10% total roster value. Configured projections are used at >=70% "
+                "starter coverage; otherwise KTC starter value is a low-confidence proxy."
             ),
         },
         "teams": teams,
     }
-

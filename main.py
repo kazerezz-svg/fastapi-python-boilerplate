@@ -8,7 +8,7 @@ from external_sources import fetch_external_context
 from analysis_engine import build_external_indexes, build_league_analysis, enrich_player
 from projection_source import fetch_projections
 from trade_engine import search_trade_packages
-from manager_behavior import build_manager_profiles
+from manager_behavior import build_manager_profiles, infer_manager_objectives
 from intelligence import pick_outlooks, player_sell_evidence, scan_young_targets
 
 app = FastAPI()
@@ -933,6 +933,33 @@ async def league_analysis_endpoint():
     return build_league_analysis(league, context, projections)
 
 
+@app.get("/analysis/team-strength")
+async def team_strength_endpoint():
+    """Compact league power rankings and competitive-window outlooks."""
+    analysis = await league_analysis_endpoint()
+    teams = []
+    for team in analysis["teams"]:
+        window = team["analysis"]["competitive_window"]
+        teams.append({
+            "power_rank": window["power_rank"],
+            "roster_id": team["roster_id"],
+            "manager": team.get("manager"),
+            "is_my_team": team.get("is_my_team", False),
+            "classification": window["classification"],
+            "current_strength_score": window["current_strength_score"],
+            "future_strength_score": window["future_strength_score"],
+            "confidence": window["confidence"],
+            "production_basis": window["production_basis"],
+        })
+    teams.sort(key=lambda item: item["power_rank"])
+    return {
+        "updated_at": analysis["updated_at"],
+        "league_id": analysis["league_id"],
+        "methodology": analysis["methodology"],
+        "teams": teams,
+    }
+
+
 @app.get("/analysis/player/{player_id}")
 async def player_analysis_endpoint(player_id: str):
     league, context = await asyncio.gather(league_map(), fetch_external_context())
@@ -972,12 +999,14 @@ async def trade_search_endpoint(target_player_id: str, buyer_roster_id: int | No
 
 @app.get("/manager-behavior")
 async def manager_behavior_endpoint():
-    history, context = await asyncio.gather(history_endpoint(), fetch_external_context())
+    history, context, analysis = await asyncio.gather(
+        history_endpoint(), fetch_external_context(), league_analysis_endpoint()
+    )
+    profiles = build_manager_profiles(history, build_external_indexes(context)["ktc"])
     return {
         "updated_at": history.get("updated_at"),
-        "profiles": build_manager_profiles(
-            history, build_external_indexes(context)["ktc"]
-        ),
+        "profiles": infer_manager_objectives(profiles, analysis),
+        "warning": "Manager objectives are probabilistic inferences, not stated intentions.",
     }
 
 
@@ -1088,4 +1117,3 @@ async def trade_opportunities_endpoint(
         "opportunities": opportunities[:max(1, min(limit, 50))],
         "methodology": "One shared live snapshot; fair-band packages ranked by mutual fit.",
     }
-

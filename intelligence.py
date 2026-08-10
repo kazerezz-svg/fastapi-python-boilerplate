@@ -35,37 +35,50 @@ def pick_outlooks(analysis):
     output = []
     for team in teams:
         ranks = team["analysis"]["league_relative"]
+        window = team["analysis"]["competitive_window"]
         market_rank = ranks["ktc_starter_value_rank"]
         production_rank = ranks["projected_starter_points_rank"]
         coverage = team["analysis"]["competitive_window"].get("projection_coverage", 0)
-        effective_rank = (
+        strength_score = window.get("current_strength_score")
+        effective_rank = window.get("power_rank") or (
             0.55 * production_rank + 0.45 * market_rank
             if coverage >= 0.7 else market_rank
         )
-        weakness = (effective_rank - 1) / max(count - 1, 1)
-        early_weight = math.exp(3 * (weakness - 0.5))
-        late_weight = math.exp(3 * (0.5 - weakness))
-        mid_weight = 1.2
+        weakness = (
+            1 - float(strength_score) / 100
+            if isinstance(strength_score, (int, float))
+            else (effective_rank - 1) / max(count - 1, 1)
+        )
+        # A deliberately broad softmax: even the strongest roster can miss, and
+        # even the weakest can produce a late pick.
+        early_weight = math.exp(2.2 * (weakness - 0.5))
+        late_weight = math.exp(2.2 * (0.5 - weakness))
+        mid_weight = 1.5
         total = early_weight + mid_weight + late_weight
         probabilities = {
             "early": round(early_weight / total, 3),
             "mid": round(mid_weight / total, 3),
             "late": round(late_weight / total, 3),
         }
+        likely_bucket = max(probabilities, key=probabilities.get)
         output.append({
             "original_roster_id": team["roster_id"], "manager": team.get("manager"),
             "probabilities": probabilities,
+            "most_likely_bucket": likely_bucket,
             "inputs": {
                 "starter_market_rank": market_rank,
                 "projected_starter_rank": production_rank if coverage >= 0.7 else None,
                 "projection_coverage": coverage,
+                "current_strength_score": strength_score,
+                "power_rank": window.get("power_rank"),
             },
             "confidence": "medium" if coverage >= 0.7 else "low",
             "method": (
                 "league-relative starter projection and market ranks"
                 if coverage >= 0.7 else
-                "market-only preseason estimate; projections unavailable"
+                "roster-strength proxy estimate; projections unavailable"
             ),
+            "warning": "Probabilistic estimate, not a promised pick slot.",
         })
     return output
 
@@ -77,7 +90,7 @@ def player_sell_evidence(player, team):
     position_total = measured["ktc_value_by_position"].get(position, 0) or 1
     share = round(value / position_total, 3) if value else None
     window = team["analysis"]["competitive_window"]
-    if window["classification"] == "insufficient_projection_data":
+    if window.get("confidence") == "low" or window["classification"] == "insufficient_projection_data":
         recommendation = "hold_or_listen"
         reason = "Projection coverage is insufficient for a confident sell decision."
     elif window["classification"] == "rebuild_candidate" and value:
@@ -97,4 +110,3 @@ def player_sell_evidence(player, team):
         },
         "heuristic": True,
     }
-

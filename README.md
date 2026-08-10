@@ -11,6 +11,7 @@ schedule.
 - Historical transactions across Sleeper's previous_league_id chain
 - KTC, offensive-line, and Weeks 1-13/1-17 SOS context for every player
 - League-relative roster and lineup analysis
+- Team power rankings with contender, playoff-bubble, retooling, and rebuild outlooks
 - Historical manager trade tendencies
 - Bounded trade-package generation and player recommendations
 - Scheduled JSON snapshots for persistent analysis
@@ -37,6 +38,16 @@ Copy .env.example to .env for local development.
 | SLEEPER_LEAGUE_ID | No | Defaults to the configured league |
 | SLEEPER_USER_ID | No | Defaults to the configured manager |
 | PROJECTIONS_URL | No | Authorized JSON projection feed |
+
+`GET /analysis/team-strength` works immediately using a clearly labeled,
+low-confidence KTC starter-value production proxy. When `PROJECTIONS_URL` covers at
+least 70% of starters, the model automatically switches to projected points and
+raises confidence to medium.
+
+`GET /manager-behavior` combines measured trade history with that team outlook to
+infer what each manager may be optimizing for. `GET /pick-outlook` returns early,
+mid, and late probabilities rather than a certain pick label; both endpoints expose
+confidence, evidence, and an explicit warning that the result is only an estimate.
 | API_BASE_URL | For snapshots | Deployed API URL used by GitHub Actions |
 
 Projection JSON may be a list or an object with a players list. Each row accepts
@@ -65,4 +76,3 @@ runs every six hours after the repository secret API_BASE_URL is configured.
 - Manager tendencies are descriptive and receive only a limited score adjustment.
 - Lineup impact currently uses optimized KTC market value.
 - Every sourced or heuristic field is labeled in API responses.
-
