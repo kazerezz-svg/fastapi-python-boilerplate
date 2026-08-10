@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 """Evidence-aware joins and league-relative roster analysis."""
 import re
 import unicodedata
