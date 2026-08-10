@@ -20,7 +20,9 @@ def test_trade_search_returns_offer_bands_and_mutual_incentives():
              "ktc_value_by_position": {"WR": 5975}}}},
     ]}
     result = search_trade_packages(
-        analysis, "t", 1, build_external_indexes(CONTEXT)["ktc"]
+        analysis, "t", 1, build_external_indexes(CONTEXT)["ktc"],
+        {"": {"completed_trades": 3, "derived_tendencies": {
+            "net_pick_buyer": True, "prefers_two_for_one_returns": True}}},
     )
     assert result["recommendations"]["opening_offer"]["assets"][0]["name"] == "Buyer RB"
     assert result["ranked_packages"][0]["seller_incentive"] >= 0
