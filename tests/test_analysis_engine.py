@@ -20,7 +20,7 @@ def test_player_evaluation_contains_every_required_context():
     assert result["strength_of_schedule"]["weeks_1_17_rank"] == 3
 
 
-def test_league_analysis_ranks_measured_value_without_fake_window_label():
+def test_league_analysis_returns_low_confidence_market_proxy_without_projections():
     league = {"league_id": "x", "teams": [
         {"roster_id": 1, "players": [{"name": "Carnell Tate", "position": "WR",
           "team": "TEN", "roster_slot": "starter"}], "draft_picks": []},
@@ -28,9 +28,11 @@ def test_league_analysis_ranks_measured_value_without_fake_window_label():
     ]}
     result = build_league_analysis(league, CONTEXT)
     assert result["teams"][0]["analysis"]["league_relative"]["ktc_starter_value_rank"] == 1
-    assert result["teams"][0]["analysis"]["competitive_window"]["classification"] == (
-        "insufficient_projection_data"
-    )
+    window = result["teams"][0]["analysis"]["competitive_window"]
+    assert window["classification"] == "contender"
+    assert window["confidence"] == "low"
+    assert window["production_basis"] == "KTC starter market value proxy"
+    assert window["power_rank"] == 1
 
 
 def test_window_classification_requires_and_uses_projection_coverage():
@@ -46,4 +48,4 @@ def test_window_classification_requires_and_uses_projection_coverage():
     ]}
     result = build_league_analysis(league, CONTEXT, projections)
     assert result["teams"][0]["analysis"]["competitive_window"]["classification"] == "contender"
-
+    assert result["teams"][0]["analysis"]["competitive_window"]["confidence"] == "medium"
