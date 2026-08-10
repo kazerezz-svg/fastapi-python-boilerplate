@@ -516,6 +516,7 @@ async def root():
             "/history",
             "/external-context",
             "/analysis/league",
+            "/projections",
             "/analysis/player/{player_id}",
             "/trade-search/{target_player_id}",
             "/manager-behavior",
@@ -923,6 +924,12 @@ async def history_endpoint():
 @app.get("/external-context")
 async def external_context_endpoint():
     return await fetch_external_context()
+
+
+@app.get("/projections")
+async def projections_endpoint():
+    """Current production projections and redraft ADP with freshness metadata."""
+    return await fetch_projections()
 
 
 @app.get("/analysis/league")
