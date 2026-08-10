@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 from analysis_engine import build_external_indexes, build_league_analysis, enrich_player
 
 
