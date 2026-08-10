@@ -510,6 +510,7 @@ async def root():
             "/analysis/player/{player_id}",
             "/trade-search/{target_player_id}",
             "/manager-behavior",
+            "/recommendation/player/{target_player_id}",
         ],
     }
 
@@ -667,6 +668,7 @@ async def league_map():
             "league_id": LEAGUE_ID,
             "league_name": league.get("name"),
             "num_teams": num_teams,
+            "roster_positions": league.get("roster_positions") or [],
             "data_provenance": {
                 "league_state": "measured_live_sleeper_api",
                 "player_metadata": "measured_sleeper_player_catalog",
@@ -949,5 +951,32 @@ async def manager_behavior_endpoint():
         "profiles": build_manager_profiles(
             history, build_external_indexes(context)["ktc"]
         ),
+    }
+
+
+@app.get("/recommendation/player/{target_player_id}")
+async def player_recommendation_endpoint(target_player_id: str):
+    trade = await trade_search_endpoint(target_player_id)
+    opening = trade["recommendations"].get("opening_offer")
+    fair = trade["recommendations"].get("fair_value")
+    walk = trade["recommendations"].get("walk_away_price")
+    return {
+        "question": f"What should I offer for {trade['target']['name']}?",
+        "answer": {
+            "opening_offer": opening,
+            "fair_value_range": {
+                "low_ratio": 0.98, "high_ratio": 1.08, "best_package": fair,
+            },
+            "walk_away": walk,
+            "plausible_counter": trade["recommendations"].get("plausible_counter"),
+        },
+        "target": trade["target"],
+        "methodology": trade["methodology"],
+        "caveats": [
+            "KTC is a market benchmark, not a projection.",
+            "Pick-quality assumptions are labeled on each pick.",
+            "Manager history is descriptive and receives a limited adjustment.",
+            "Competitive-window conclusions require configured projections.",
+        ],
     }
 
