@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1.2 seconds
+Wall time: 1.1 seconds
 Output:
 from fastapi import FastAPI, HTTPException
 import asyncio
@@ -10,6 +10,7 @@ import os
 from external_sources import fetch_external_context
 from analysis_engine import build_external_indexes, build_league_analysis, enrich_player
 from projection_source import fetch_projections
+from trade_engine import search_trade_packages
 
 app = FastAPI()
 
@@ -506,6 +507,7 @@ async def root():
             "/external-context",
             "/analysis/league",
             "/analysis/player/{player_id}",
+            "/trade-search/{target_player_id}",
         ],
     }
 
@@ -914,4 +916,24 @@ async def player_analysis_endpoint(player_id: str):
                     "player": enrich_player(player, indexes),
                 }
     raise HTTPException(status_code=404, detail="player not found in league")
+
+
+@app.get("/trade-search/{target_player_id}")
+async def trade_search_endpoint(target_player_id: str, buyer_roster_id: int | None = None):
+    league, context, projections = await asyncio.gather(
+        league_map(), fetch_external_context(), fetch_projections()
+    )
+    analysis = build_league_analysis(league, context, projections)
+    if buyer_roster_id is None:
+        my_team = next((team for team in analysis["teams"] if team.get("is_my_team")), None)
+        if not my_team:
+            raise HTTPException(status_code=404, detail="configured user roster not found")
+        buyer_roster_id = my_team["roster_id"]
+    ktc_index = build_external_indexes(context)["ktc"]
+    try:
+        return search_trade_packages(
+            analysis, target_player_id, buyer_roster_id, ktc_index
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
