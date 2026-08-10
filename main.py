@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1.1 seconds
+Wall time: 1 seconds
 Output:
 from fastapi import FastAPI, HTTPException
 import asyncio
@@ -11,6 +11,7 @@ from external_sources import fetch_external_context
 from analysis_engine import build_external_indexes, build_league_analysis, enrich_player
 from projection_source import fetch_projections
 from trade_engine import search_trade_packages
+from manager_behavior import build_manager_profiles
 
 app = FastAPI()
 
@@ -508,6 +509,7 @@ async def root():
             "/analysis/league",
             "/analysis/player/{player_id}",
             "/trade-search/{target_player_id}",
+            "/manager-behavior",
         ],
     }
 
@@ -920,8 +922,8 @@ async def player_analysis_endpoint(player_id: str):
 
 @app.get("/trade-search/{target_player_id}")
 async def trade_search_endpoint(target_player_id: str, buyer_roster_id: int | None = None):
-    league, context, projections = await asyncio.gather(
-        league_map(), fetch_external_context(), fetch_projections()
+    league, context, projections, history = await asyncio.gather(
+        league_map(), fetch_external_context(), fetch_projections(), history_endpoint()
     )
     analysis = build_league_analysis(league, context, projections)
     if buyer_roster_id is None:
@@ -930,10 +932,22 @@ async def trade_search_endpoint(target_player_id: str, buyer_roster_id: int | No
             raise HTTPException(status_code=404, detail="configured user roster not found")
         buyer_roster_id = my_team["roster_id"]
     ktc_index = build_external_indexes(context)["ktc"]
+    profiles = build_manager_profiles(history, ktc_index)
     try:
         return search_trade_packages(
-            analysis, target_player_id, buyer_roster_id, ktc_index
+            analysis, target_player_id, buyer_roster_id, ktc_index, profiles
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
+
+
+@app.get("/manager-behavior")
+async def manager_behavior_endpoint():
+    history, context = await asyncio.gather(history_endpoint(), fetch_external_context())
+    return {
+        "updated_at": history.get("updated_at"),
+        "profiles": build_manager_profiles(
+            history, build_external_indexes(context)["ktc"]
+        ),
+    }
 
