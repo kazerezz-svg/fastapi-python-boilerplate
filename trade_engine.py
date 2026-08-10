@@ -1,10 +1,11 @@
 Exit code: 0
-Wall time: 1 seconds
+Wall time: 1.1 seconds
 Output:
 """Bounded trade-package generation with transparent value and fit heuristics."""
 import itertools
 
 from analysis_engine import normalize_name
+from lineup_impact import simulate_market_trade, starter_slots
 
 
 def _pick_label(pick, quality="Mid"):
@@ -99,13 +100,23 @@ def search_trade_packages(
             seller_fit = round(min(1.0, seller_fit + behavior_adjustment), 3)
             buyer_fit = _position_need(buyer, target.get("position"))
             fairness = round(1 - min(abs(1 - ratio), 0.5) / 0.5, 3)
-            score = round(0.50 * fairness + 0.30 * seller_fit + 0.20 * buyer_fit, 3)
+            lineup = simulate_market_trade(
+                buyer, seller, target, {"assets": list(combo)},
+                starter_slots(league_analysis.get("lineup_slots")),
+            )
+            buyer_lineup_fit = max(0.0, min(1.0, lineup["buyer"]["delta"] / 1500 + 0.5))
+            score = round(
+                0.40 * fairness + 0.25 * seller_fit
+                + 0.15 * buyer_fit + 0.20 * buyer_lineup_fit,
+                3,
+            )
             packages.append({
                 "assets": list(combo), "package_value": value,
                 "target_value": target_value, "value_ratio": round(ratio, 3),
                 "buyer_position_need": buyer_fit, "seller_incentive": seller_fit,
                 "manager_behavior_adjustment": round(behavior_adjustment, 3),
                 "fairness": fairness, "score": score,
+                "lineup_impact": lineup,
             })
     packages.sort(key=lambda package: package["score"], reverse=True)
 
@@ -129,8 +140,8 @@ def search_trade_packages(
         "methodology": {
             "measured": "KTC benchmark values and roster positional market composition",
             "heuristics": (
-                "50% value fairness, 30% seller incentive (liquidity/replacement), "
-                "20% buyer positional need"
+                "40% value fairness, 25% seller incentive, 15% buyer positional "
+                "need, 20% optimized-lineup market impact"
             ),
             "limits": "One- and two-asset combinations from the buyer's top 24 valued assets.",
             "manager_history": {
