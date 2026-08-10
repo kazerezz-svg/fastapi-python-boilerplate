@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1.1 seconds
+Wall time: 1 seconds
 Output:
 """Bounded trade-package generation with transparent value and fit heuristics."""
 import itertools
@@ -45,7 +45,10 @@ def _position_need(team, position):
     return round(1 - position_value / total, 3)
 
 
-def search_trade_packages(league_analysis, target_player_id, buyer_roster_id, ktc_index):
+def search_trade_packages(
+    league_analysis, target_player_id, buyer_roster_id, ktc_index,
+    manager_profiles=None,
+):
     teams = league_analysis.get("teams") or []
     buyer = next((t for t in teams if t.get("roster_id") == buyer_roster_id), None)
     seller = None
@@ -62,6 +65,9 @@ def search_trade_packages(league_analysis, target_player_id, buyer_roster_id, kt
     target_value = (target.get("market") or {}).get("value")
     if not isinstance(target_value, (int, float)):
         raise ValueError("target has no matched KTC value")
+    seller_user_id = str((seller.get("manager") or {}).get("user_id") or "")
+    seller_profile = (manager_profiles or {}).get(seller_user_id) or {}
+    tendencies = seller_profile.get("derived_tendencies") or {}
 
     assets = sorted(team_assets(buyer, ktc_index), key=lambda a: a["value"], reverse=True)
     # Keep the search systematic but bounded for API latency and intelligibility.
@@ -85,6 +91,12 @@ def search_trade_packages(league_analysis, target_player_id, buyer_roster_id, kt
                 + 0.20 * min(replacement, 1),
                 3,
             )
+            behavior_adjustment = 0.0
+            if tendencies.get("net_pick_buyer") and pick_count:
+                behavior_adjustment += 0.08
+            if tendencies.get("prefers_two_for_one_returns") and size == 2:
+                behavior_adjustment += 0.06
+            seller_fit = round(min(1.0, seller_fit + behavior_adjustment), 3)
             buyer_fit = _position_need(buyer, target.get("position"))
             fairness = round(1 - min(abs(1 - ratio), 0.5) / 0.5, 3)
             score = round(0.50 * fairness + 0.30 * seller_fit + 0.20 * buyer_fit, 3)
@@ -92,6 +104,7 @@ def search_trade_packages(league_analysis, target_player_id, buyer_roster_id, kt
                 "assets": list(combo), "package_value": value,
                 "target_value": target_value, "value_ratio": round(ratio, 3),
                 "buyer_position_need": buyer_fit, "seller_incentive": seller_fit,
+                "manager_behavior_adjustment": round(behavior_adjustment, 3),
                 "fairness": fairness, "score": score,
             })
     packages.sort(key=lambda package: package["score"], reverse=True)
@@ -120,6 +133,11 @@ def search_trade_packages(league_analysis, target_player_id, buyer_roster_id, kt
                 "20% buyer positional need"
             ),
             "limits": "One- and two-asset combinations from the buyer's top 24 valued assets.",
+            "manager_history": {
+                "seller_sample_size": seller_profile.get("completed_trades", 0),
+                "tendencies": tendencies,
+                "maximum_score_adjustment": 0.14,
+            },
         },
     }
 
