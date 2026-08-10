@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1.1 seconds
+Wall time: 1 seconds
 Output:
 from fastapi import FastAPI, HTTPException
 import asyncio
@@ -8,6 +8,7 @@ from datetime import datetime, timezone, timedelta
 from collections import defaultdict, Counter
 import os
 from external_sources import fetch_external_context
+from analysis_engine import build_external_indexes, build_league_analysis, enrich_player
 
 app = FastAPI()
 
@@ -502,6 +503,8 @@ async def root():
             "/trades",
             "/history",
             "/external-context",
+            "/analysis/league",
+            "/analysis/player/{player_id}",
         ],
     }
 
@@ -886,4 +889,26 @@ async def history_endpoint():
 @app.get("/external-context")
 async def external_context_endpoint():
     return await fetch_external_context()
+
+
+@app.get("/analysis/league")
+async def league_analysis_endpoint():
+    league, context = await asyncio.gather(league_map(), fetch_external_context())
+    return build_league_analysis(league, context)
+
+
+@app.get("/analysis/player/{player_id}")
+async def player_analysis_endpoint(player_id: str):
+    league, context = await asyncio.gather(league_map(), fetch_external_context())
+    indexes = build_external_indexes(context)
+    for team in league.get("teams") or []:
+        for player in team.get("players") or []:
+            if str(player.get("player_id")) == str(player_id):
+                return {
+                    "updated_at": league.get("updated_at"),
+                    "owner": team.get("manager"),
+                    "roster_id": team.get("roster_id"),
+                    "player": enrich_player(player, indexes),
+                }
+    raise HTTPException(status_code=404, detail="player not found in league")
 
