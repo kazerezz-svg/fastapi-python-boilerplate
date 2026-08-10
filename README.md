@@ -2,6 +2,7 @@
 
 FastAPI service for league 1337530303182290944 that combines live Sleeper
 state, linked-season transaction history, KeepTradeCut market benchmarks,
+Draft Sharks 3D projections/redraft values, broad ESPN projection/ADP coverage,
 4for4 offensive-line projections, and FFToolbox positional strength of
 schedule.
 
@@ -39,10 +40,11 @@ Copy .env.example to .env for local development.
 | SLEEPER_USER_ID | No | Defaults to the configured manager |
 | PROJECTIONS_URL | No | Authorized JSON projection feed |
 
-`GET /analysis/team-strength` works immediately using a clearly labeled,
-low-confidence KTC starter-value production proxy. When `PROJECTIONS_URL` covers at
-least 70% of starters, the model automatically switches to projected points and
-raises confidence to medium.
+`GET /analysis/team-strength` uses 2026 projected points and redraft value when
+at least 70% of starters match. Draft Sharks is preferred, ESPN supplies broad
+coverage, and FantasyPros provides a consensus cross-check. These sources refresh
+every six hours with a stale-last-good fallback. KTC is used only as the labeled
+low-confidence production proxy when projection coverage is insufficient.
 
 `GET /manager-behavior` combines measured trade history with that team outlook to
 infer what each manager may be optimizing for. `GET /pick-outlook` returns early,
