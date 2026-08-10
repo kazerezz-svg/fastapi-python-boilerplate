@@ -16,6 +16,10 @@ def refresh(api_base_url: str, output_path: Path) -> None:
         history.raise_for_status()
         external_context = client.get(f"{base}/external-context")
         external_context.raise_for_status()
+        projections = client.get(f"{base}/projections")
+        projections.raise_for_status()
+        team_strength = client.get(f"{base}/analysis/team-strength")
+        team_strength.raise_for_status()
 
     payload = {
         "snapshot_version": 1,
@@ -24,6 +28,8 @@ def refresh(api_base_url: str, output_path: Path) -> None:
         "league_map": league_map.json(),
         "history": history.json(),
         "external_context": external_context.json(),
+        "projections": projections.json(),
+        "team_strength": team_strength.json(),
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     temporary = output_path.with_suffix(output_path.suffix + ".tmp")
@@ -40,4 +46,3 @@ if __name__ == "__main__":
     parser.add_argument("--output", default="snapshots/latest.json")
     args = parser.parse_args()
     refresh(args.api_base_url, Path(args.output))
-
