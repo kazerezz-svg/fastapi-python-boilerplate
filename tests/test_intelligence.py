@@ -13,6 +13,7 @@ def team(rid, player, rank):
             "competitive_window": {
                 "classification": "insufficient_projection_data",
                 "projection_coverage": 0,
+                "confidence": "low",
             },
         },
     }
@@ -29,6 +30,7 @@ def test_young_target_scan_and_pick_outlook_are_labeled():
     outlook = pick_outlooks(analysis)[1]
     assert outlook["confidence"] == "low"
     assert sum(outlook["probabilities"].values()) > 0.99
+    assert outlook["most_likely_bucket"] in {"early", "mid", "late"}
 
 
 def test_sell_evidence_withholds_confident_call_without_projections():
@@ -38,4 +40,3 @@ def test_sell_evidence_withholds_confident_call_without_projections():
     }
     result = player_sell_evidence(player, team(1, player, 1))
     assert result["recommendation"] == "hold_or_listen"
-
