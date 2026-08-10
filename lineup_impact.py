@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 """Greedy lineup optimization for transparent before/after trade deltas."""
 
 ELIGIBLE = {
