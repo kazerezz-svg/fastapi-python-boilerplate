@@ -85,3 +85,46 @@ def build_manager_profiles(history, ktc_index):
         }
     return output
 
+
+def infer_manager_objectives(profiles, analysis):
+    """Blend observed transactions with roster context into a cautious intent guess."""
+    output = {}
+    for team in analysis.get("teams") or []:
+        manager = team.get("manager") or {}
+        user_id = str(manager.get("user_id") or "")
+        profile = profiles.get(user_id, {})
+        tendencies = profile.get("derived_tendencies") or {}
+        window = team["analysis"]["competitive_window"]
+        trades = int(profile.get("completed_trades") or 0)
+        pick_delta = int(profile.get("picks_acquired") or 0) - int(
+            profile.get("picks_sent") or 0
+        )
+        classification = window.get("classification")
+        if pick_delta > 0 and classification in {"retooling", "rebuild_candidate"}:
+            objective = "accumulating_future_value"
+        elif pick_delta < 0 and classification in {"contender", "playoff_bubble"}:
+            objective = "buying_current_production"
+        elif classification == "contender":
+            objective = "likely_competing"
+        elif classification == "rebuild_candidate":
+            objective = "likely_rebuilding"
+        else:
+            objective = "mixed_or_unclear"
+        confidence = "medium" if trades >= 3 else "low"
+        output[user_id or str(team["roster_id"])] = {
+            **profile,
+            "inferred_objective": {
+                "label": objective,
+                "confidence": confidence,
+                "evidence": {
+                    "completed_trade_sample": trades,
+                    "net_picks_acquired": pick_delta,
+                    "team_window": classification,
+                    "current_strength_score": window.get("current_strength_score"),
+                    "team_model_confidence": window.get("confidence"),
+                    "net_pick_buyer": tendencies.get("net_pick_buyer"),
+                },
+                "warning": "Intent is inferred from behavior and roster context; it is not known fact.",
+            },
+        }
+    return output
