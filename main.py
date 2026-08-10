@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1.2 seconds
+Wall time: 1.1 seconds
 Output:
 from fastapi import FastAPI, HTTPException
 import asyncio
@@ -309,6 +309,46 @@ async def fetch_transactions(client):
     return transactions
 
 
+async def fetch_league_chain(client, starting_league_id=LEAGUE_ID, max_seasons=10):
+    """Follow Sleeper's previous_league_id links without looping forever."""
+    leagues = []
+    seen = set()
+    league_id = str(starting_league_id)
+
+    while league_id and league_id != "0" and league_id not in seen:
+        if len(leagues) >= max_seasons:
+            break
+        seen.add(league_id)
+        league = await get_json(client, f"{BASE}/league/{league_id}")
+        leagues.append(league)
+        league_id = str(league.get("previous_league_id") or "")
+
+    return leagues
+
+
+async def fetch_league_transactions(client, league):
+    league_id = str(league["league_id"])
+    season = str(league.get("season") or "")
+    results = await asyncio.gather(
+        *[
+            get_json(client, f"{BASE}/league/{league_id}/transactions/{week}")
+            for week in TRANSACTION_WEEKS
+        ],
+        return_exceptions=True,
+    )
+    transactions = []
+    for week, result in zip(TRANSACTION_WEEKS, results):
+        if isinstance(result, Exception):
+            continue
+        for transaction in result:
+            item = dict(transaction)
+            item["week"] = week
+            item["league_id"] = league_id
+            item["season"] = season
+            transactions.append(item)
+    return transactions
+
+
 def translate_transaction_player_map(mapping, players):
     if not mapping:
         return []
@@ -459,6 +499,7 @@ async def root():
             "/league-map",
             "/transactions",
             "/trades",
+            "/history",
         ],
     }
 
@@ -778,4 +819,64 @@ async def trades_endpoint():
             status_code=500,
             detail=str(e)
         )
+
+
+@app.get("/history")
+async def history_endpoint():
+    """Normalized completed transaction history across linked Sleeper seasons."""
+    try:
+        async with httpx.AsyncClient() as client:
+            leagues = await fetch_league_chain(client)
+            players = await get_players(client)
+            season_payloads = await asyncio.gather(
+                *[
+                    asyncio.gather(
+                        get_json(client, f"{BASE}/league/{league['league_id']}/users"),
+                        get_json(client, f"{BASE}/league/{league['league_id']}/rosters"),
+                        fetch_league_transactions(client, league),
+                    )
+                    for league in leagues
+                ]
+            )
+
+        output = []
+        season_counts = {}
+        for league, (users, rosters, transactions) in zip(leagues, season_payloads):
+            _, roster_to_manager = build_roster_maps(users, rosters)
+            completed = [tx for tx in transactions if tx.get("status") == "complete"]
+            season = str(league.get("season") or "")
+            season_counts[season] = len(completed)
+            for tx in completed:
+                roster_ids = [int(r) for r in tx.get("roster_ids") or []]
+                output.append({
+                    "transaction_id": tx.get("transaction_id"),
+                    "league_id": tx.get("league_id"),
+                    "season": season,
+                    "week": tx.get("week"),
+                    "created": tx.get("created"),
+                    "type": tx.get("type"),
+                    "managers": [
+                        roster_to_manager.get(rid, {"roster_id": rid})
+                        for rid in roster_ids
+                    ],
+                    "adds": translate_transaction_player_map(tx.get("adds"), players),
+                    "drops": translate_transaction_player_map(tx.get("drops"), players),
+                    "draft_picks": tx.get("draft_picks") or [],
+                    "waiver_budget": tx.get("waiver_budget") or [],
+                })
+
+        output.sort(key=lambda tx: tx.get("created") or 0, reverse=True)
+        return {
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+            "league_chain": [
+                {"league_id": league.get("league_id"), "season": league.get("season")}
+                for league in leagues
+            ],
+            "season_counts": season_counts,
+            "transaction_count": len(output),
+            "transactions": output,
+            "data_provenance": "measured_linked_sleeper_leagues",
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
