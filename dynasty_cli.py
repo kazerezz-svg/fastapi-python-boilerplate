@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.2 seconds
-Output:
 """Small CLI for durable Codex/ChatGPT access to the deployed API."""
 import argparse
 import json
