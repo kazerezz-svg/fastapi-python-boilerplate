@@ -1,0 +1,125 @@
+Exit code: 0
+Wall time: 1.1 seconds
+Output:
+"""Bounded trade-package generation with transparent value and fit heuristics."""
+import itertools
+
+from analysis_engine import normalize_name
+
+
+def _pick_label(pick, quality="Mid"):
+    suffix = {1: "1st", 2: "2nd", 3: "3rd", 4: "4th"}.get(pick.get("round"))
+    return f"{pick.get('season')} {quality} {suffix}" if suffix else None
+
+
+def team_assets(team, ktc_index):
+    assets = []
+    for player in team.get("players") or []:
+        value = (player.get("market") or {}).get("value")
+        if isinstance(value, (int, float)):
+            assets.append({
+                "asset_type": "player", "id": str(player.get("player_id")),
+                "name": player.get("name"), "position": player.get("position"),
+                "value": value, "valuation": "KTC current market",
+            })
+    for pick in team.get("draft_picks") or []:
+        label = _pick_label(pick)
+        benchmark = ktc_index.get(normalize_name(label)) if label else None
+        if benchmark and isinstance(benchmark.get("value"), (int, float)):
+            assets.append({
+                "asset_type": "pick",
+                "id": f"{pick.get('season')}-{pick.get('round')}-{pick.get('original_roster_id')}",
+                "name": label, "value": benchmark["value"],
+                "season": pick.get("season"), "round": pick.get("round"),
+                "original_roster_id": pick.get("original_roster_id"),
+                "valuation": "KTC neutral-mid benchmark",
+                "assumption": "Pick quality is unknown; Mid is a neutral liquidity benchmark.",
+            })
+    return assets
+
+
+def _position_need(team, position):
+    values = team["analysis"]["measured"].get("ktc_value_by_position") or {}
+    position_value = values.get(position, 0)
+    total = sum(values.values()) or 1
+    return round(1 - position_value / total, 3)
+
+
+def search_trade_packages(league_analysis, target_player_id, buyer_roster_id, ktc_index):
+    teams = league_analysis.get("teams") or []
+    buyer = next((t for t in teams if t.get("roster_id") == buyer_roster_id), None)
+    seller = None
+    target = None
+    for team in teams:
+        for player in team.get("players") or []:
+            if str(player.get("player_id")) == str(target_player_id):
+                seller, target = team, player
+                break
+    if not buyer or not seller or not target:
+        raise ValueError("buyer roster or target player not found")
+    if buyer.get("roster_id") == seller.get("roster_id"):
+        raise ValueError("buyer already owns target player")
+    target_value = (target.get("market") or {}).get("value")
+    if not isinstance(target_value, (int, float)):
+        raise ValueError("target has no matched KTC value")
+
+    assets = sorted(team_assets(buyer, ktc_index), key=lambda a: a["value"], reverse=True)
+    # Keep the search systematic but bounded for API latency and intelligibility.
+    candidates = assets[:24]
+    packages = []
+    for size in (1, 2):
+        for combo in itertools.combinations(candidates, size):
+            value = sum(asset["value"] for asset in combo)
+            ratio = value / target_value
+            if not 0.72 <= ratio <= 1.30:
+                continue
+            pick_count = sum(asset["asset_type"] == "pick" for asset in combo)
+            replacement = sum(
+                asset["asset_type"] == "player"
+                and asset.get("position") == target.get("position")
+                for asset in combo
+            )
+            seller_fit = round(
+                0.55 * min(ratio, 1.15) / 1.15
+                + 0.25 * min(pick_count, 1)
+                + 0.20 * min(replacement, 1),
+                3,
+            )
+            buyer_fit = _position_need(buyer, target.get("position"))
+            fairness = round(1 - min(abs(1 - ratio), 0.5) / 0.5, 3)
+            score = round(0.50 * fairness + 0.30 * seller_fit + 0.20 * buyer_fit, 3)
+            packages.append({
+                "assets": list(combo), "package_value": value,
+                "target_value": target_value, "value_ratio": round(ratio, 3),
+                "buyer_position_need": buyer_fit, "seller_incentive": seller_fit,
+                "fairness": fairness, "score": score,
+            })
+    packages.sort(key=lambda package: package["score"], reverse=True)
+
+    def best(low, high):
+        return next((p for p in packages if low <= p["value_ratio"] <= high), None)
+
+    return {
+        "target": {
+            "player_id": str(target_player_id), "name": target.get("name"),
+            "position": target.get("position"), "value": target_value,
+            "seller": seller.get("manager"), "seller_roster_id": seller.get("roster_id"),
+        },
+        "buyer": buyer.get("manager"),
+        "recommendations": {
+            "opening_offer": best(0.88, 0.98),
+            "fair_value": best(0.98, 1.08),
+            "walk_away_price": best(1.08, 1.18),
+            "plausible_counter": best(1.00, 1.12),
+        },
+        "ranked_packages": packages[:20],
+        "methodology": {
+            "measured": "KTC benchmark values and roster positional market composition",
+            "heuristics": (
+                "50% value fairness, 30% seller incentive (liquidity/replacement), "
+                "20% buyer positional need"
+            ),
+            "limits": "One- and two-asset combinations from the buyer's top 24 valued assets.",
+        },
+    }
+
