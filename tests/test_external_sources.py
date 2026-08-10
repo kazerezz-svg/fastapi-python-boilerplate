@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.2 seconds
-Output:
 from external_sources import parse_ktc, parse_offensive_lines, parse_sos
 
 
