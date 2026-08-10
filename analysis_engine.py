@@ -190,6 +190,7 @@ def build_league_analysis(league_map, context, projections=None):
     return {
         "updated_at": league_map.get("updated_at"),
         "league_id": league_map.get("league_id"),
+        "lineup_slots": league_map.get("roster_positions") or [],
         "methodology": {
             "measured": ["Sleeper roster state", "KTC market values", "draft-pick counts"],
             "sourced_context": ["4for4 offensive line", "FFToolbox SOS W1-13/W1-17"],
