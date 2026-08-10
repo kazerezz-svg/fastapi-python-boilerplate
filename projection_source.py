@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 """Optional, provider-neutral projected-points input."""
 import os
 from datetime import datetime, timezone
