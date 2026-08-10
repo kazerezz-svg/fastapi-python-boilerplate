@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.2 seconds
-Output:
 from analysis_engine import build_external_indexes
 from trade_engine import search_trade_packages
 from test_analysis_engine import CONTEXT
