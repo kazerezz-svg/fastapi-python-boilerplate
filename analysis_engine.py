@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1 seconds
+Wall time: 1.1 seconds
 Output:
 """Evidence-aware joins and league-relative roster analysis."""
 import re
@@ -73,18 +73,39 @@ def enrich_player(player, indexes):
     }
 
 
-def summarize_team(team, indexes):
+def build_projection_indexes(projections):
+    rows = projections.get("data") or []
+    return {
+        "by_id": {str(row["player_id"]): row for row in rows if row.get("player_id")},
+        "by_name": {normalize_name(row.get("name")): row for row in rows if row.get("name")},
+    }
+
+
+def summarize_team(team, indexes, projection_indexes=None):
     players = [enrich_player(player, indexes) for player in team.get("players") or []]
+    projection_indexes = projection_indexes or {"by_id": {}, "by_name": {}}
     position_values = defaultdict(int)
     total_value = starter_value = matched = 0
+    projected_starter_points = 0.0
+    projected_starters_matched = starter_count = 0
     for player in players:
+        is_starter = player.get("roster_slot") == "starter"
+        if is_starter:
+            starter_count += 1
+            projection = (
+                projection_indexes["by_id"].get(str(player.get("player_id")))
+                or projection_indexes["by_name"].get(normalize_name(player.get("name")))
+            )
+            if projection and isinstance(projection.get("projected_points"), (int, float)):
+                projected_starters_matched += 1
+                projected_starter_points += float(projection["projected_points"])
         value = player["market"]["value"]
         if not isinstance(value, (int, float)):
             continue
         matched += 1
         total_value += value
         position_values[player.get("position") or "OTHER"] += value
-        if player.get("roster_slot") == "starter":
+        if is_starter:
             starter_value += value
     picks = team.get("draft_picks") or []
     return {
@@ -99,6 +120,9 @@ def summarize_team(team, indexes):
                 "player_count": len(players),
                 "future_pick_count": len(picks),
                 "future_first_count": sum(1 for pick in picks if pick.get("round") == 1),
+                "projected_starter_points": round(projected_starter_points, 2),
+                "projected_starters_matched": projected_starters_matched,
+                "starter_count": starter_count,
             },
             "competitive_window": {
                 "classification": "insufficient_projection_data",
@@ -119,20 +143,61 @@ def _rank(teams, metric):
         team["analysis"]["league_relative"][f"{metric}_rank"] = rank
 
 
-def build_league_analysis(league_map, context):
+def build_league_analysis(league_map, context, projections=None):
     indexes = build_external_indexes(context)
-    teams = [summarize_team(team, indexes) for team in league_map.get("teams") or []]
+    projection_indexes = build_projection_indexes(projections or {})
+    teams = [
+        summarize_team(team, indexes, projection_indexes)
+        for team in league_map.get("teams") or []
+    ]
     for team in teams:
         team["analysis"]["league_relative"] = {}
-    for metric in ("ktc_total_player_value", "ktc_starter_value", "future_first_count"):
+    for metric in (
+        "ktc_total_player_value", "ktc_starter_value", "future_first_count",
+        "projected_starter_points",
+    ):
         _rank(teams, metric)
+    team_count = len(teams)
+    playoff_slots = int(
+        (league_map.get("league") or {}).get("settings", {}).get("playoff_teams")
+        or max(1, team_count // 2)
+    )
+    for team in teams:
+        measured = team["analysis"]["measured"]
+        coverage = (
+            measured["projected_starters_matched"] / measured["starter_count"]
+            if measured["starter_count"] else 0
+        )
+        window = team["analysis"]["competitive_window"]
+        window["projection_coverage"] = round(coverage, 3)
+        if coverage < 0.7:
+            continue
+        production_rank = team["analysis"]["league_relative"][
+            "projected_starter_points_rank"
+        ]
+        market_rank = team["analysis"]["league_relative"]["ktc_starter_value_rank"]
+        if production_rank <= playoff_slots and market_rank <= max(1, team_count // 2):
+            classification = "contender"
+        elif production_rank > playoff_slots and market_rank > max(1, team_count // 2):
+            classification = "rebuild_candidate"
+        else:
+            classification = "retooling_or_fringe"
+        window.update({
+            "classification": classification,
+            "reason": "league-relative projected starter points plus starter market value",
+            "heuristic": True,
+        })
     return {
         "updated_at": league_map.get("updated_at"),
         "league_id": league_map.get("league_id"),
         "methodology": {
             "measured": ["Sleeper roster state", "KTC market values", "draft-pick counts"],
             "sourced_context": ["4for4 offensive line", "FFToolbox SOS W1-13/W1-17"],
-            "withheld": ["competitive-window classification pending projections"],
+            "projection_source_status": (projections or {}).get("status", "not_configured"),
+            "window_rule": (
+                "Requires >=70% starter projection coverage; combines league-relative "
+                "projected starter points and KTC starter value."
+            ),
         },
         "teams": teams,
     }
