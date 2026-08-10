@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1.1 seconds
+Wall time: 1.2 seconds
 Output:
 from analysis_engine import build_external_indexes
 from trade_engine import search_trade_packages
@@ -11,7 +11,7 @@ def test_trade_search_returns_offer_bands_and_mutual_incentives():
               "market": {"value": 5975}}
     buyer_player = {"player_id": "b", "name": "Buyer RB", "position": "RB",
                     "market": {"value": 5500}}
-    analysis = {"teams": [
+    analysis = {"lineup_slots": ["RB", "WR"], "teams": [
         {"roster_id": 1, "manager": {"username": "buyer"}, "players": [buyer_player],
          "draft_picks": [], "analysis": {"measured": {
              "ktc_value_by_position": {"RB": 5500}}}},
@@ -26,11 +26,12 @@ def test_trade_search_returns_offer_bands_and_mutual_incentives():
     )
     assert result["recommendations"]["opening_offer"]["assets"][0]["name"] == "Buyer RB"
     assert result["ranked_packages"][0]["seller_incentive"] >= 0
+    assert "lineup_impact" in result["ranked_packages"][0]
     assert result["methodology"]["heuristics"]
 
 
 def test_trade_search_rejects_buying_own_player():
-    analysis = {"teams": [{"roster_id": 1, "players": [
+    analysis = {"lineup_slots": ["WR"], "teams": [{"roster_id": 1, "players": [
         {"player_id": "t", "name": "Carnell Tate", "position": "WR",
          "market": {"value": 5975}}
     ], "draft_picks": [], "analysis": {"measured": {"ktc_value_by_position": {}}}}]}
