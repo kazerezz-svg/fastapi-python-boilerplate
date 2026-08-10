@@ -1,16 +1,19 @@
+Exit code: 0
+Wall time: 1.2 seconds
+Output:
 from fastapi import FastAPI, HTTPException
 import asyncio
 import httpx
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict, Counter
+import os
 
 app = FastAPI()
 
-LEAGUE_ID = "1337530303182290944"
-MY_USER_ID = "870453414893723648"  # scaceres
+LEAGUE_ID = os.getenv("SLEEPER_LEAGUE_ID", "1337530303182290944")
+MY_USER_ID = os.getenv("SLEEPER_USER_ID", "870453414893723648")
 BASE = "https://api.sleeper.app/v1"
 
-FUTURE_SEASONS = (2027, 2028, 2029)
 TRANSACTION_WEEKS = range(1, 19)
 
 _player_cache = {
@@ -88,7 +91,9 @@ def build_pick_ownership(
     target_roster_id,
     traded_picks,
     roster_to_manager,
-    num_teams
+    num_teams,
+    seasons=None,
+    draft_rounds=4,
 ):
     traded_lookup = {}
 
@@ -102,9 +107,13 @@ def build_pick_ownership(
 
     picks = []
 
-    for season in FUTURE_SEASONS:
+    if seasons is None:
+        current_year = datetime.now(timezone.utc).year
+        seasons = range(current_year + 1, current_year + 4)
+
+    for season in seasons:
         for original_roster_id in range(1, num_teams + 1):
-            for round_num in range(1, 5):
+            for round_num in range(1, draft_rounds + 1):
                 key = (
                     season,
                     round_num,
@@ -421,15 +430,8 @@ def estimate_pick_quality(team):
     projections and actual season Max PF.
     """
     standings = team.get("standings") or {}
-    profile = team.get("roster_profile") or {}
-
     wins = standings.get("wins", 0)
     losses = standings.get("losses", 0)
-    points_for = standings.get("points_for", 0)
-
-    overall_age = (
-        profile.get("overall", {}).get("average_age")
-    )
 
     if wins + losses > 0:
         win_pct = wins / max(wins + losses, 1)
@@ -440,13 +442,6 @@ def estimate_pick_quality(team):
             return "early"
         else:
             return "mid"
-
-    # Preseason fallback: intentionally conservative.
-    if overall_age is not None:
-        if overall_age >= 27.5:
-            return "volatile"
-        elif overall_age <= 24.5:
-            return "volatile"
 
     return "unknown"
 
@@ -547,6 +542,9 @@ async def league_map():
             or league.get("settings", {}).get("num_teams")
             or 12
         )
+        league_season = int(league.get("season") or datetime.now(timezone.utc).year)
+        draft_rounds = int(league.get("settings", {}).get("draft_rounds") or 4)
+        future_seasons = range(league_season + 1, league_season + 4)
 
         _, roster_to_manager = build_roster_maps(
             users,
@@ -573,6 +571,8 @@ async def league_map():
                 traded_picks=traded_picks,
                 roster_to_manager=roster_to_manager,
                 num_teams=num_teams,
+                seasons=future_seasons,
+                draft_rounds=draft_rounds,
             )
 
             roster_profile = calculate_roster_profile(
@@ -616,6 +616,11 @@ async def league_map():
             "league_id": LEAGUE_ID,
             "league_name": league.get("name"),
             "num_teams": num_teams,
+            "data_provenance": {
+                "league_state": "measured_live_sleeper_api",
+                "player_metadata": "measured_sleeper_player_catalog",
+                "pick_quality_estimate": "heuristic_in_season_record_only",
+            },
             "teams": teams,
         }
 
@@ -773,3 +778,4 @@ async def trades_endpoint():
             status_code=500,
             detail=str(e)
         )
+
