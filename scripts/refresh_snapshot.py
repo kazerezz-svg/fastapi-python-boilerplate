@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 """Fetch the deployed API and write a deterministic analysis snapshot."""
 import argparse
 import json
