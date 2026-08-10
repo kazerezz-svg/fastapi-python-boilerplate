@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 from intelligence import pick_outlooks, player_sell_evidence, scan_young_targets
 
 
