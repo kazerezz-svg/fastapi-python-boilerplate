@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 from lineup_impact import optimal_lineup, simulate_market_trade, starter_slots
 
 
