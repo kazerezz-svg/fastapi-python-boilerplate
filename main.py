@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1 seconds
+Wall time: 1.2 seconds
 Output:
 from fastapi import FastAPI, HTTPException
 import asyncio
@@ -9,6 +9,7 @@ from collections import defaultdict, Counter
 import os
 from external_sources import fetch_external_context
 from analysis_engine import build_external_indexes, build_league_analysis, enrich_player
+from projection_source import fetch_projections
 
 app = FastAPI()
 
@@ -893,8 +894,10 @@ async def external_context_endpoint():
 
 @app.get("/analysis/league")
 async def league_analysis_endpoint():
-    league, context = await asyncio.gather(league_map(), fetch_external_context())
-    return build_league_analysis(league, context)
+    league, context, projections = await asyncio.gather(
+        league_map(), fetch_external_context(), fetch_projections()
+    )
+    return build_league_analysis(league, context, projections)
 
 
 @app.get("/analysis/player/{player_id}")
