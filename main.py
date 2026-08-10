@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+import asyncio
 import httpx
 from datetime import datetime, timezone
 
@@ -27,7 +28,7 @@ async def root():
 async def league_state():
     try:
         async with httpx.AsyncClient() as client:
-            league, users, rosters, traded_picks = await __import__("asyncio").gather(
+            league, users, rosters, traded_picks = await asyncio.gather(
                 get_json(client, f"{BASE}/league/{LEAGUE_ID}"),
                 get_json(client, f"{BASE}/league/{LEAGUE_ID}/users"),
                 get_json(client, f"{BASE}/league/{LEAGUE_ID}/rosters"),
