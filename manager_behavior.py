@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 """Measured manager trade tendencies from normalized Sleeper history."""
 from collections import Counter, defaultdict
 
