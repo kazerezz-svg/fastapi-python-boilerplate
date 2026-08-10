@@ -84,6 +84,7 @@ def summarize_team(team, indexes, projection_indexes=None):
     position_values = defaultdict(int)
     total_value = starter_value = matched = 0
     projected_starter_points = 0.0
+    starter_redraft_adps = []
     projected_starters_matched = starter_count = 0
     for player in players:
         is_starter = player.get("roster_slot") == "starter"
@@ -96,6 +97,8 @@ def summarize_team(team, indexes, projection_indexes=None):
             if projection and isinstance(projection.get("projected_points"), (int, float)):
                 projected_starters_matched += 1
                 projected_starter_points += float(projection["projected_points"])
+                if isinstance(projection.get("redraft_adp"), (int, float)):
+                    starter_redraft_adps.append(float(projection["redraft_adp"]))
         value = player["market"]["value"]
         if not isinstance(value, (int, float)):
             continue
@@ -120,6 +123,11 @@ def summarize_team(team, indexes, projection_indexes=None):
                 "projected_starter_points": round(projected_starter_points, 2),
                 "projected_starters_matched": projected_starters_matched,
                 "starter_count": starter_count,
+                "average_starter_redraft_adp": (
+                    round(sum(starter_redraft_adps) / len(starter_redraft_adps), 2)
+                    if starter_redraft_adps else None
+                ),
+                "starter_redraft_adp_matched": len(starter_redraft_adps),
             },
             "competitive_window": {
                 "classification": "insufficient_projection_data",
@@ -176,6 +184,10 @@ def build_league_analysis(league_map, context, projections=None):
         window["projection_coverage"] = round(coverage, 3)
         relative = team["analysis"]["league_relative"]
         has_projections = coverage >= 0.7
+        adp_coverage = (
+            measured["starter_redraft_adp_matched"] / measured["starter_count"]
+            if measured["starter_count"] else 0
+        )
         production_rank = relative[
             "projected_starter_points_rank" if has_projections
             else "ktc_starter_value_rank"
@@ -207,9 +219,10 @@ def build_league_analysis(league_map, context, projections=None):
             "current_strength_score": current_score,
             "future_strength_score": future_score,
             "power_rank": None,
-            "confidence": "medium" if has_projections else "low",
+            "confidence": "high" if has_projections and adp_coverage >= 0.7 else ("medium" if has_projections else "low"),
             "production_basis": (
-                "configured projected starter points" if has_projections
+                "2026 projected starter points corroborated by redraft ADP" if has_projections and adp_coverage >= 0.7
+                else "2026 projected starter points" if has_projections
                 else "KTC starter market value proxy"
             ),
             "reason": (
@@ -234,6 +247,10 @@ def build_league_analysis(league_map, context, projections=None):
             "measured": ["Sleeper roster state", "KTC market values", "draft-pick counts"],
             "sourced_context": ["4for4 offensive line", "FFToolbox SOS W1-13/W1-17"],
             "projection_source_status": (projections or {}).get("status", "not_configured"),
+            "projection_source": (projections or {}).get("source_type"),
+            "projection_updated_at": (projections or {}).get("updated_at"),
+            "projection_cache": (projections or {}).get("cache"),
+            "projected_players_available": len((projections or {}).get("data") or []),
             "window_rule": (
                 "Current strength is 65% production signal, 25% starter market value, "
                 "and 10% total roster value. Configured projections are used at >=70% "
