@@ -7,6 +7,7 @@ import httpx
 from datetime import datetime, timezone, timedelta
 from collections import defaultdict, Counter
 import os
+from external_sources import fetch_external_context
 
 app = FastAPI()
 
@@ -500,6 +501,7 @@ async def root():
             "/transactions",
             "/trades",
             "/history",
+            "/external-context",
         ],
     }
 
@@ -879,4 +881,9 @@ async def history_endpoint():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/external-context")
+async def external_context_endpoint():
+    return await fetch_external_context()
 
