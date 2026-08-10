@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.1 seconds
-Output:
 # Sleeper Dynasty Intelligence
 
 FastAPI service for league 1337530303182290944 that combines live Sleeper
