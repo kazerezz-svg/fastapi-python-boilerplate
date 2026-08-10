@@ -1,5 +1,5 @@
 Exit code: 0
-Wall time: 1 seconds
+Wall time: 1.1 seconds
 Output:
 from fastapi import FastAPI, HTTPException
 import asyncio
@@ -12,6 +12,7 @@ from analysis_engine import build_external_indexes, build_league_analysis, enric
 from projection_source import fetch_projections
 from trade_engine import search_trade_packages
 from manager_behavior import build_manager_profiles
+from intelligence import pick_outlooks, player_sell_evidence, scan_young_targets
 
 app = FastAPI()
 
@@ -28,9 +29,20 @@ _player_cache = {
 
 
 async def get_json(client: httpx.AsyncClient, url: str):
-    response = await client.get(url, timeout=30.0)
-    response.raise_for_status()
-    return response.json()
+    last_error = None
+    for attempt in range(3):
+        try:
+            response = await client.get(
+                url, timeout=30.0,
+                headers={"User-Agent": "dynasty-intelligence/0.1"},
+            )
+            response.raise_for_status()
+            return response.json()
+        except Exception as exc:
+            last_error = exc
+            if attempt < 2:
+                await asyncio.sleep(0.25 * (2 ** attempt))
+    raise last_error
 
 
 async def get_players(client: httpx.AsyncClient):
@@ -511,6 +523,10 @@ async def root():
             "/trade-search/{target_player_id}",
             "/manager-behavior",
             "/recommendation/player/{target_player_id}",
+            "/scan/young-targets",
+            "/pick-outlook",
+            "/recommendation/sell/{player_id}",
+            "/scan/trade-opportunities",
         ],
     }
 
@@ -878,6 +894,19 @@ async def history_endpoint():
                 })
 
         output.sort(key=lambda tx: tx.get("created") or 0, reverse=True)
+        transaction_ids = [tx["transaction_id"] for tx in output if tx["transaction_id"]]
+        validation = {
+            "duplicate_transaction_ids": len(transaction_ids) - len(set(transaction_ids)),
+            "unmapped_manager_references": sum(
+                1 for tx in output for manager in tx["managers"]
+                if not manager.get("user_id")
+            ),
+            "warnings": [],
+        }
+        if validation["duplicate_transaction_ids"]:
+            validation["warnings"].append("duplicate transaction IDs detected")
+        if validation["unmapped_manager_references"]:
+            validation["warnings"].append("historical roster manager mapping incomplete")
         return {
             "updated_at": datetime.now(timezone.utc).isoformat(),
             "league_chain": [
@@ -888,6 +917,7 @@ async def history_endpoint():
             "transaction_count": len(output),
             "transactions": output,
             "data_provenance": "measured_linked_sleeper_leagues",
+            "validation": validation,
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -978,5 +1008,87 @@ async def player_recommendation_endpoint(target_player_id: str):
             "Manager history is descriptive and receives a limited adjustment.",
             "Competitive-window conclusions require configured projections.",
         ],
+    }
+
+
+@app.get("/scan/young-targets")
+async def young_targets_endpoint(
+    position: str = "WR", max_age: float = 24, buyer_roster_id: int | None = None
+):
+    analysis = await league_analysis_endpoint()
+    if buyer_roster_id is None:
+        buyer = next((team for team in analysis["teams"] if team.get("is_my_team")), None)
+        if not buyer:
+            raise HTTPException(status_code=404, detail="configured user roster not found")
+        buyer_roster_id = buyer["roster_id"]
+    return {
+        "position": position.upper(), "max_age": max_age,
+        "targets": scan_young_targets(
+            analysis, buyer_roster_id, position.upper(), max_age
+        ),
+    }
+
+
+@app.get("/pick-outlook")
+async def pick_outlook_endpoint():
+    analysis = await league_analysis_endpoint()
+    return {
+        "league_id": analysis["league_id"],
+        "outlooks": pick_outlooks(analysis),
+        "warning": "Probabilities are heuristic and confidence is explicit.",
+    }
+
+
+@app.get("/recommendation/sell/{player_id}")
+async def sell_recommendation_endpoint(player_id: str):
+    analysis = await league_analysis_endpoint()
+    for team in analysis["teams"]:
+        for player in team["players"]:
+            if str(player.get("player_id")) == str(player_id):
+                return {
+                    "player": player, "owner": team.get("manager"),
+                    **player_sell_evidence(player, team),
+                }
+    raise HTTPException(status_code=404, detail="player not found in league")
+
+
+@app.get("/scan/trade-opportunities")
+async def trade_opportunities_endpoint(
+    position: str = "WR", max_age: float = 25, limit: int = 20
+):
+    league, context, projections, history = await asyncio.gather(
+        league_map(), fetch_external_context(), fetch_projections(), history_endpoint()
+    )
+    analysis = build_league_analysis(league, context, projections)
+    buyer = next((team for team in analysis["teams"] if team.get("is_my_team")), None)
+    if not buyer:
+        raise HTTPException(status_code=404, detail="configured user roster not found")
+    indexes = build_external_indexes(context)
+    profiles = build_manager_profiles(history, indexes["ktc"])
+    targets = scan_young_targets(
+        analysis, buyer["roster_id"], position.upper(), max_age
+    )[:40]
+    opportunities = []
+    for target in targets:
+        try:
+            result = search_trade_packages(
+                analysis, target["player_id"], buyer["roster_id"],
+                indexes["ktc"], profiles,
+            )
+        except ValueError:
+            continue
+        best = result["recommendations"].get("fair_value")
+        if best:
+            opportunities.append({
+                "target": result["target"], "best_fair_package": best,
+                "score": best["score"], "seller_history": (
+                    result["methodology"]["manager_history"]
+                ),
+            })
+    opportunities.sort(key=lambda item: item["score"], reverse=True)
+    return {
+        "position": position.upper(), "max_age": max_age,
+        "opportunities": opportunities[:max(1, min(limit, 50))],
+        "methodology": "One shared live snapshot; fair-band packages ranked by mutual fit.",
     }
 
