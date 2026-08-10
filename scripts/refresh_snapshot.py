@@ -17,6 +17,8 @@ def refresh(api_base_url: str, output_path: Path) -> None:
         league_map.raise_for_status()
         history = client.get(f"{base}/history")
         history.raise_for_status()
+        external_context = client.get(f"{base}/external-context")
+        external_context.raise_for_status()
 
     payload = {
         "snapshot_version": 1,
@@ -24,6 +26,7 @@ def refresh(api_base_url: str, output_path: Path) -> None:
         "source_api": base,
         "league_map": league_map.json(),
         "history": history.json(),
+        "external_context": external_context.json(),
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     temporary = output_path.with_suffix(output_path.suffix + ".tmp")
