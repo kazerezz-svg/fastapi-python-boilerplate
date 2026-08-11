@@ -27,6 +27,7 @@ schedule.
 - /manager-behavior - measured historical manager tendencies
 - /trade-search/{sleeper_player_id} - ranked packages
 - /recommendation/player/{sleeper_player_id} - direct offer guidance
+- Two-sided trade searches support one to three assets received and sent.
 
 Interactive OpenAPI documentation is available at /docs.
 
@@ -78,3 +79,4 @@ runs every six hours after the repository secret API_BASE_URL is configured.
 - Manager tendencies are descriptive and receive only a limited score adjustment.
 - Lineup impact currently uses optimized KTC market value.
 - Every sourced or heuristic field is labeled in API responses.
+
