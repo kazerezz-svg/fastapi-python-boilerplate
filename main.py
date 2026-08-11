@@ -12,6 +12,7 @@ from manager_behavior import build_manager_profiles, infer_manager_objectives
 from intelligence import pick_outlooks, player_sell_evidence, scan_young_targets
 
 app = FastAPI()
+APP_BUILD = "two-sided-v1.1"
 
 LEAGUE_ID = os.getenv("SLEEPER_LEAGUE_ID", "1337530303182290944")
 MY_USER_ID = os.getenv("SLEEPER_USER_ID", "870453414893723648")
