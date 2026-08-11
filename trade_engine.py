@@ -1,3 +1,6 @@
+Exit code: 0
+Wall time: 1.2 seconds
+Output:
 """Bounded trade-package generation with transparent value and fit heuristics."""
 import itertools
 
@@ -45,8 +48,17 @@ def _position_need(team, position):
 
 def search_trade_packages(
     league_analysis, target_player_id, buyer_roster_id, ktc_index,
-    manager_profiles=None,
+    manager_profiles=None, include_asset_ids=None, exclude_asset_ids=None,
+    package_style="balanced", max_assets=2,
 ):
+    include_ids = {str(value) for value in (include_asset_ids or []) if value}
+    exclude_ids = {str(value) for value in (exclude_asset_ids or []) if value}
+    if include_ids & exclude_ids:
+        raise ValueError("an asset cannot be both required and protected")
+    valid_styles = {"balanced", "picks_heavy", "players_heavy", "two_for_one"}
+    if package_style not in valid_styles:
+        raise ValueError("package_style must be balanced, picks_heavy, players_heavy, or two_for_one")
+    max_assets = max(1, min(int(max_assets), 3))
     teams = league_analysis.get("teams") or []
     buyer = next((t for t in teams if t.get("roster_id") == buyer_roster_id), None)
     seller = None
@@ -68,11 +80,24 @@ def search_trade_packages(
     tendencies = seller_profile.get("derived_tendencies") or {}
 
     assets = sorted(team_assets(buyer, ktc_index), key=lambda a: a["value"], reverse=True)
+    known_ids = {asset["id"] for asset in assets}
+    missing = include_ids - known_ids
+    if missing:
+        raise ValueError(f"required asset not found on buyer roster: {', '.join(sorted(missing))}")
+    assets = [asset for asset in assets if asset["id"] not in exclude_ids]
     # Keep the search systematic but bounded for API latency and intelligibility.
     candidates = assets[:24]
+    for required in (asset for asset in assets if asset["id"] in include_ids):
+        if required not in candidates:
+            candidates.append(required)
     packages = []
-    for size in (1, 2):
+    for size in range(1, max_assets + 1):
         for combo in itertools.combinations(candidates, size):
+            combo_ids = {asset["id"] for asset in combo}
+            if not include_ids.issubset(combo_ids):
+                continue
+            if package_style == "two_for_one" and size < 2:
+                continue
             value = sum(asset["value"] for asset in combo)
             ratio = value / target_value
             if not 0.72 <= ratio <= 1.30:
@@ -102,9 +127,17 @@ def search_trade_packages(
                 starter_slots(league_analysis.get("lineup_slots")),
             )
             buyer_lineup_fit = max(0.0, min(1.0, lineup["buyer"]["delta"] / 1500 + 0.5))
+            player_count = size - pick_count
+            style_adjustment = 0.0
+            if package_style == "picks_heavy":
+                style_adjustment = 0.10 * pick_count / size
+            elif package_style == "players_heavy":
+                style_adjustment = 0.10 * player_count / size
+            elif package_style == "two_for_one":
+                style_adjustment = 0.08 if size >= 2 else 0.0
             score = round(
                 0.40 * fairness + 0.25 * seller_fit
-                + 0.15 * buyer_fit + 0.20 * buyer_lineup_fit,
+                + 0.15 * buyer_fit + 0.20 * buyer_lineup_fit + style_adjustment,
                 3,
             )
             packages.append({
@@ -112,6 +145,7 @@ def search_trade_packages(
                 "target_value": target_value, "value_ratio": round(ratio, 3),
                 "buyer_position_need": buyer_fit, "seller_incentive": seller_fit,
                 "manager_behavior_adjustment": round(behavior_adjustment, 3),
+                "package_style_adjustment": round(style_adjustment, 3),
                 "fairness": fairness, "score": score,
                 "lineup_impact": lineup,
             })
@@ -127,6 +161,12 @@ def search_trade_packages(
             "seller": seller.get("manager"), "seller_roster_id": seller.get("roster_id"),
         },
         "buyer": buyer.get("manager"),
+        "constraints_applied": {
+            "include_asset_ids": sorted(include_ids),
+            "exclude_asset_ids": sorted(exclude_ids),
+            "package_style": package_style,
+            "max_assets": max_assets,
+        },
         "recommendations": {
             "opening_offer": best(0.88, 0.98),
             "fair_value": best(0.98, 1.08),
@@ -140,7 +180,7 @@ def search_trade_packages(
                 "40% value fairness, 25% seller incentive, 15% buyer positional "
                 "need, 20% optimized-lineup market impact"
             ),
-            "limits": "One- and two-asset combinations from the buyer's top 24 valued assets.",
+            "limits": f"One- through {max_assets}-asset combinations from the buyer's top valued assets.",
             "manager_history": {
                 "seller_sample_size": seller_profile.get("completed_trades", 0),
                 "tendencies": tendencies,
