@@ -288,6 +288,7 @@ def search_trade_packages(
         },
         "buyer": buyer.get("manager"),
         "constraints_applied": {
+            "engine_version": "two-sided-v1",
             "include_asset_ids": sorted(include_ids),
             "exclude_asset_ids": sorted(exclude_ids),
             "package_style": package_style,
