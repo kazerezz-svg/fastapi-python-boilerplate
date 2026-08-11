@@ -1,5 +1,5 @@
-from analysis_engine import build_external_indexes
-from trade_engine import search_trade_packages
+from analysis_engine import build_external_indexes, normalize_name
+from trade_engine import search_trade_packages, team_assets
 from test_analysis_engine import CONTEXT
 
 
@@ -64,7 +64,7 @@ def test_trade_search_honors_required_protected_and_style_constraints():
     assert result["constraints_applied"]["package_style"] == "two_for_one"
 
 
-def test_required_asset_returns_closest_package_when_outside_normal_band():
+def test_required_asset_blocks_closest_package_when_it_is_severe_overpay():
     target = {"player_id": "t", "name": "Target", "position": "WR", "market": {"value": 6000}}
     expensive = {"player_id": "x", "name": "Expensive", "position": "RB", "market": {"value": 9000}}
     analysis = {"lineup_slots": ["RB", "WR"], "teams": [
@@ -75,9 +75,8 @@ def test_required_asset_returns_closest_package_when_outside_normal_band():
     ]}
     result = search_trade_packages(analysis, "t", 1, {}, include_asset_ids=["x"])
     offers = [offer for offer in result["recommendations"].values() if offer]
-    assert offers
-    assert offers[0]["outside_standard_range"] is True
-    assert result["constraint_status"]["used_closest_packages"] is True
+    assert offers == []
+    assert result["constraint_status"]["no_safe_packages"] is True
 
 
 def test_recommendation_slots_are_unique_and_exact_size_is_honored():
@@ -97,4 +96,22 @@ def test_recommendation_slots_are_unique_and_exact_size_is_honored():
     signatures = [tuple(asset["id"] for asset in offer["assets"]) for offer in offers]
     assert all(len(signature) == 3 for signature in signatures)
     assert len(signatures) == len(set(signatures))
+
+
+def test_pick_values_use_original_roster_projection_and_all_rounds():
+    pick_team = {"roster_id": 1, "players": [], "draft_picks": [
+        {"season": 2027, "round": 4, "original_roster_id": 2}
+    ]}
+    ktc = {
+        normalize_name("2027 Early 4th"): {"value": 900},
+        normalize_name("2027 Mid 4th"): {"value": 600},
+        normalize_name("2027 Late 4th"): {"value": 300},
+    }
+    assets = team_assets(pick_team, ktc, {2: {
+        "probabilities": {"early": .7, "mid": .2, "late": .1},
+        "most_likely_bucket": "early", "confidence": "medium", "method": "test",
+    }})
+    assert assets[0]["name"] == "2027 Early 4th"
+    assert assets[0]["value"] == 780
+    assert assets[0]["pick_projection"]["confidence"] == "medium"
 
