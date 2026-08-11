@@ -988,6 +988,8 @@ async def trade_search_endpoint(
     target_player_id: str, buyer_roster_id: int | None = None,
     include_asset_ids: str | None = None, exclude_asset_ids: str | None = None,
     package_style: str = "balanced", min_assets: int = 1, max_assets: int = 2,
+    receive_size: int = 1, include_receive_asset_ids: str | None = None,
+    exclude_receive_asset_ids: str | None = None,
 ):
     league, context, projections, history = await asyncio.gather(
         league_map(), fetch_external_context(), fetch_projections(), history_endpoint()
@@ -1005,7 +1007,9 @@ async def trade_search_endpoint(
             analysis, target_player_id, buyer_roster_id, ktc_index, profiles,
             [value for value in (include_asset_ids or "").split(",") if value],
             [value for value in (exclude_asset_ids or "").split(",") if value],
-            package_style, min_assets, max_assets,
+            package_style, min_assets, max_assets, receive_size,
+            [value for value in (include_receive_asset_ids or "").split(",") if value],
+            [value for value in (exclude_receive_asset_ids or "").split(",") if value],
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
@@ -1029,11 +1033,16 @@ async def player_recommendation_endpoint(
     target_player_id: str, include_asset_ids: str | None = None,
     exclude_asset_ids: str | None = None, package_style: str = "balanced",
     min_assets: int = 1, max_assets: int = 2,
+    receive_size: int = 1, include_receive_asset_ids: str | None = None,
+    exclude_receive_asset_ids: str | None = None,
 ):
     trade = await trade_search_endpoint(
         target_player_id, include_asset_ids=include_asset_ids,
         exclude_asset_ids=exclude_asset_ids, package_style=package_style,
         min_assets=min_assets, max_assets=max_assets,
+        receive_size=receive_size,
+        include_receive_asset_ids=include_receive_asset_ids,
+        exclude_receive_asset_ids=exclude_receive_asset_ids,
     )
     opening = trade["recommendations"].get("opening_offer")
     fair = trade["recommendations"].get("fair_value")

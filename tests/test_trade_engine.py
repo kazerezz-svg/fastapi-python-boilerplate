@@ -117,3 +117,27 @@ def test_pick_values_use_original_roster_projection_and_all_rounds():
     assert assets[0]["value"] == 780
     assert assets[0]["pick_projection"]["confidence"] == "medium"
 
+
+def test_two_sided_search_requires_target_and_returns_unique_received_assets():
+    target = {"player_id": "t", "name": "Target", "position": "WR", "market": {"value": 5000}}
+    extra = {"player_id": "e", "name": "Extra", "position": "RB", "market": {"value": 1500}}
+    buyer_players = [
+        {"player_id": "b1", "name": "Buyer 1", "position": "RB", "market": {"value": 4000}},
+        {"player_id": "b2", "name": "Buyer 2", "position": "WR", "market": {"value": 2500}},
+        {"player_id": "b3", "name": "Buyer 3", "position": "QB", "market": {"value": 1800}},
+    ]
+    analysis = {"lineup_slots": ["QB", "RB", "WR"], "teams": [
+        {"roster_id": 1, "manager": {}, "players": buyer_players, "draft_picks": [],
+         "analysis": {"measured": {"ktc_value_by_position": {"RB": 4000, "WR": 2500, "QB": 1800}}}},
+        {"roster_id": 2, "manager": {}, "players": [target, extra], "draft_picks": [],
+         "analysis": {"measured": {"ktc_value_by_position": {"WR": 5000, "RB": 1500}}}},
+    ]}
+    result = search_trade_packages(
+        analysis, "t", 1, {}, min_assets=2, max_assets=3,
+        receive_size=2, include_receive_asset_ids=["e"],
+    )
+    offers = [offer for offer in result["recommendations"].values() if offer]
+    assert offers
+    assert all([asset["id"] for asset in offer["receive_assets"]] == ["t", "e"] for offer in offers)
+    assert all(.72 <= offer["value_ratio"] <= 1.30 for offer in offers)
+

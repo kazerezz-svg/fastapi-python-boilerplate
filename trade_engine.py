@@ -71,10 +71,13 @@ def _position_need(team, position):
 def search_trade_packages(
     league_analysis, target_player_id, buyer_roster_id, ktc_index,
     manager_profiles=None, include_asset_ids=None, exclude_asset_ids=None,
-    package_style="balanced", min_assets=1, max_assets=2,
+    package_style="balanced", min_assets=1, max_assets=2, receive_size=1,
+    include_receive_asset_ids=None, exclude_receive_asset_ids=None,
 ):
     include_ids = {str(value) for value in (include_asset_ids or []) if value}
     exclude_ids = {str(value) for value in (exclude_asset_ids or []) if value}
+    include_receive_ids = {str(value) for value in (include_receive_asset_ids or []) if value}
+    exclude_receive_ids = {str(value) for value in (exclude_receive_asset_ids or []) if value}
     if include_ids & exclude_ids:
         raise ValueError("an asset cannot be both required and protected")
     valid_styles = {"balanced", "picks_heavy", "players_heavy", "two_for_one"}
@@ -82,6 +85,7 @@ def search_trade_packages(
         raise ValueError("package_style must be balanced, picks_heavy, players_heavy, or two_for_one")
     max_assets = max(1, min(int(max_assets), 3))
     min_assets = max(1, min(int(min_assets), max_assets))
+    receive_size = max(1, min(int(receive_size), 3))
     teams = league_analysis.get("teams") or []
     buyer = next((t for t in teams if t.get("roster_id") == buyer_roster_id), None)
     seller = None
@@ -134,7 +138,8 @@ def search_trade_packages(
                 continue
             value = sum(asset["value"] for asset in combo)
             ratio = value / target_value
-            in_standard_range = 0.72 <= ratio <= 1.30
+            search_upper = 1.30 if receive_size == 1 else 2.20
+            in_standard_range = 0.72 <= ratio <= search_upper
             if not in_standard_range and not include_ids:
                 continue
             pick_count = sum(asset["asset_type"] == "pick" for asset in combo)
@@ -194,12 +199,62 @@ def search_trade_packages(
         packages = near_misses[:20]
     packages.sort(key=lambda package: package["score"], reverse=True)
 
+    target_asset = {
+        "asset_type": "player", "id": str(target_player_id),
+        "name": target.get("name"), "position": target.get("position"),
+        "value": target_value, "valuation": "KTC current market",
+    }
+    if receive_size > 1:
+        seller_assets = [
+            asset for asset in team_assets(seller, ktc_index, outlook_by_roster)
+            if asset["id"] != str(target_player_id) and asset["id"] not in exclude_receive_ids
+        ]
+        seller_known = {asset["id"] for asset in seller_assets}
+        missing_receive = include_receive_ids - seller_known
+        if missing_receive:
+            raise ValueError(f"required received asset not found on seller roster: {', '.join(sorted(missing_receive))}")
+        seller_players = sorted(
+            [asset for asset in seller_assets if asset["asset_type"] == "player"],
+            key=lambda asset: asset["value"], reverse=True,
+        )[:16]
+        seller_picks = [asset for asset in seller_assets if asset["asset_type"] == "pick"]
+        receive_candidates = seller_players + seller_picks
+        extra_sets = [
+            combo for combo in itertools.combinations(receive_candidates, receive_size - 1)
+            if include_receive_ids.issubset({asset["id"] for asset in combo})
+        ]
+        expanded = []
+        for package in packages[:120]:
+            for extras in extra_sets:
+                received = [target_asset, *extras]
+                received_value = sum(asset["value"] for asset in received)
+                ratio = package["package_value"] / received_value
+                if not 0.72 <= ratio <= 1.30:
+                    continue
+                fairness = round(1 - min(abs(1 - ratio), 0.5) / 0.5, 3)
+                variant = dict(package)
+                variant.update({
+                    "receive_assets": received,
+                    "target_value": received_value,
+                    "value_ratio": round(ratio, 3),
+                    "fairness": fairness,
+                    "score": round(package["score"] - 0.40 * package["fairness"] + 0.40 * fairness, 3),
+                })
+                expanded.append(variant)
+        packages = sorted(expanded, key=lambda package: package["score"], reverse=True)
+    else:
+        for package in packages:
+            package["receive_assets"] = [target_asset]
+
     used_signatures = set()
 
     def pick_unique(low, high, anchor, prefer_size=None):
         available = [
             package for package in packages
-            if tuple(asset["id"] for asset in package["assets"]) not in used_signatures
+            if (
+                tuple(asset["id"] for asset in package["assets"]),
+                tuple(asset["id"] for asset in package["receive_assets"]),
+            ) not in used_signatures
         ]
         if prefer_size:
             sized = [package for package in available if len(package["assets"]) == prefer_size]
@@ -210,7 +265,10 @@ def search_trade_packages(
         if not pool:
             return None
         choice = min(pool, key=lambda package: (abs(anchor - package["value_ratio"]), -package["score"]))
-        used_signatures.add(tuple(asset["id"] for asset in choice["assets"]))
+        used_signatures.add((
+            tuple(asset["id"] for asset in choice["assets"]),
+            tuple(asset["id"] for asset in choice["receive_assets"]),
+        ))
         return choice
 
     used_near_miss = bool(packages and all(p["outside_standard_range"] for p in packages))
@@ -235,6 +293,9 @@ def search_trade_packages(
             "package_style": package_style,
             "min_assets": min_assets,
             "max_assets": max_assets,
+            "receive_size": receive_size,
+            "include_receive_asset_ids": sorted(include_receive_ids),
+            "exclude_receive_asset_ids": sorted(exclude_receive_ids),
         },
         "constraint_status": {
             "used_closest_packages": used_near_miss,
@@ -257,7 +318,7 @@ def search_trade_packages(
                 "40% value fairness, 25% seller incentive, 15% buyer positional "
                 "need, 20% optimized-lineup market impact"
             ),
-            "limits": f"{min_assets}- through {max_assets}-asset combinations from the buyer's top valued assets; displayed recommendations are unique.",
+            "limits": f"Bounded {min_assets}-{max_assets} outgoing by {receive_size} incoming search; primary target required, secondary seller candidates limited to relevant players and all picks.",
             "manager_history": {
                 "seller_sample_size": seller_profile.get("completed_trades", 0),
                 "tendencies": tendencies,
