@@ -1051,6 +1051,7 @@ async def player_recommendation_endpoint(
         "target": trade["target"],
         "methodology": trade["methodology"],
         "constraints_applied": trade["constraints_applied"],
+        "constraint_status": trade["constraint_status"],
         "caveats": [
             "KTC is a market benchmark, not a projection.",
             "Pick-quality assumptions are labeled on each pick.",
