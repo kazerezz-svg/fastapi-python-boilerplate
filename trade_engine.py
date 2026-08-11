@@ -1,6 +1,3 @@
-Exit code: 0
-Wall time: 1.2 seconds
-Output:
 """Bounded trade-package generation with transparent value and fit heuristics."""
 import itertools
 
