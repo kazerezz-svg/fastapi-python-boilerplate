@@ -261,7 +261,7 @@ def search_trade_packages(
             if sized:
                 available = sized
         in_band = [package for package in available if low <= package["value_ratio"] <= high]
-        pool = in_band or (available if include_ids else [])
+        pool = in_band or (available if include_ids or receive_size > 1 else [])
         if not pool:
             return None
         choice = min(pool, key=lambda package: (abs(anchor - package["value_ratio"]), -package["score"]))
