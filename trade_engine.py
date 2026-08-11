@@ -88,6 +88,7 @@ def search_trade_packages(
         if required not in candidates:
             candidates.append(required)
     packages = []
+    near_misses = []
     for size in range(1, max_assets + 1):
         for combo in itertools.combinations(candidates, size):
             combo_ids = {asset["id"] for asset in combo}
@@ -97,7 +98,8 @@ def search_trade_packages(
                 continue
             value = sum(asset["value"] for asset in combo)
             ratio = value / target_value
-            if not 0.72 <= ratio <= 1.30:
+            in_standard_range = 0.72 <= ratio <= 1.30
+            if not in_standard_range and not include_ids:
                 continue
             pick_count = sum(asset["asset_type"] == "pick" for asset in combo)
             replacement = sum(
@@ -137,7 +139,7 @@ def search_trade_packages(
                 + 0.15 * buyer_fit + 0.20 * buyer_lineup_fit + style_adjustment,
                 3,
             )
-            packages.append({
+            package = {
                 "assets": list(combo), "package_value": value,
                 "target_value": target_value, "value_ratio": round(ratio, 3),
                 "buyer_position_need": buyer_fit, "seller_incentive": seller_fit,
@@ -145,11 +147,24 @@ def search_trade_packages(
                 "package_style_adjustment": round(style_adjustment, 3),
                 "fairness": fairness, "score": score,
                 "lineup_impact": lineup,
-            })
+                "outside_standard_range": not in_standard_range,
+            }
+            if in_standard_range:
+                packages.append(package)
+            else:
+                near_misses.append(package)
+    if include_ids and not packages:
+        near_misses.sort(key=lambda package: abs(1 - package["value_ratio"]))
+        packages = near_misses[:20]
     packages.sort(key=lambda package: package["score"], reverse=True)
 
-    def best(low, high):
-        return next((p for p in packages if low <= p["value_ratio"] <= high), None)
+    def best(low, high, anchor):
+        match = next((p for p in packages if low <= p["value_ratio"] <= high), None)
+        if match or not include_ids or not packages:
+            return match
+        return min(packages, key=lambda package: abs(anchor - package["value_ratio"]))
+
+    used_near_miss = bool(packages and all(p["outside_standard_range"] for p in packages))
 
     return {
         "target": {
@@ -164,11 +179,20 @@ def search_trade_packages(
             "package_style": package_style,
             "max_assets": max_assets,
         },
+        "constraint_status": {
+            "used_closest_packages": used_near_miss,
+            "message": (
+                "No package with the required asset lands inside the normal 72%-130% KTC search range. "
+                "Showing the closest constructions so you can see whether it creates an underpay or overpay."
+                if used_near_miss else
+                "Packages satisfy the selected constraints and the normal KTC search range."
+            ),
+        },
         "recommendations": {
-            "opening_offer": best(0.88, 0.98),
-            "fair_value": best(0.98, 1.08),
-            "walk_away_price": best(1.08, 1.18),
-            "plausible_counter": best(1.00, 1.12),
+            "opening_offer": best(0.88, 0.98, 0.93),
+            "fair_value": best(0.98, 1.08, 1.03),
+            "walk_away_price": best(1.08, 1.18, 1.13),
+            "plausible_counter": best(1.00, 1.12, 1.06),
         },
         "ranked_packages": packages[:20],
         "methodology": {
