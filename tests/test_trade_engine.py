@@ -100,7 +100,8 @@ def test_recommendation_slots_are_unique_and_exact_size_is_honored():
 
 def test_pick_values_use_original_roster_projection_and_all_rounds():
     pick_team = {"roster_id": 1, "players": [], "draft_picks": [
-        {"season": 2027, "round": 4, "original_roster_id": 2}
+        {"season": 2027, "round": 4, "original_roster_id": 2,
+         "original_owner_team": "The Rebuilders"}
     ]}
     ktc = {
         normalize_name("2027 Early 4th"): {"value": 900},
@@ -111,7 +112,8 @@ def test_pick_values_use_original_roster_projection_and_all_rounds():
         "probabilities": {"early": .7, "mid": .2, "late": .1},
         "most_likely_bucket": "early", "confidence": "medium", "method": "test",
     }})
-    assert assets[0]["name"] == "2027 Early 4th"
+    assert assets[0]["name"] == "2027 Early 4th Â· from The Rebuilders"
+    assert assets[0]["original_owner"] == "The Rebuilders"
     assert assets[0]["value"] == 780
     assert assets[0]["pick_projection"]["confidence"] == "medium"
 
