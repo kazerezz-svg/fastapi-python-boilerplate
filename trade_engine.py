@@ -2,6 +2,7 @@
 import itertools
 
 from analysis_engine import normalize_name
+from intelligence import pick_outlooks
 from lineup_impact import simulate_market_trade, starter_slots
 
 
@@ -10,7 +11,7 @@ def _pick_label(pick, quality="Mid"):
     return f"{pick.get('season')} {quality} {suffix}" if suffix else None
 
 
-def team_assets(team, ktc_index):
+def team_assets(team, ktc_index, pick_outlook_by_roster=None):
     assets = []
     for player in team.get("players") or []:
         value = (player.get("market") or {}).get("value")
@@ -21,17 +22,34 @@ def team_assets(team, ktc_index):
                 "value": value, "valuation": "KTC current market",
             })
     for pick in team.get("draft_picks") or []:
-        label = _pick_label(pick)
-        benchmark = ktc_index.get(normalize_name(label)) if label else None
-        if benchmark and isinstance(benchmark.get("value"), (int, float)):
+        outlook = (pick_outlook_by_roster or {}).get(pick.get("original_roster_id")) or {}
+        probabilities = outlook.get("probabilities") or {"early": 0, "mid": 1, "late": 0}
+        bucket_values = {}
+        for bucket in ("early", "mid", "late"):
+            bucket_label = _pick_label(pick, bucket.title())
+            benchmark = ktc_index.get(normalize_name(bucket_label)) if bucket_label else None
+            if benchmark and isinstance(benchmark.get("value"), (int, float)):
+                bucket_values[bucket] = benchmark["value"]
+        likely_bucket = outlook.get("most_likely_bucket") or "mid"
+        value = sum(probabilities.get(bucket, 0) * bucket_values[bucket] for bucket in bucket_values)
+        if not value and bucket_values:
+            value = bucket_values.get(likely_bucket) or bucket_values.get("mid") or next(iter(bucket_values.values()))
+        label = _pick_label(pick, likely_bucket.title())
+        if value:
             assets.append({
                 "asset_type": "pick",
                 "id": f"{pick.get('season')}-{pick.get('round')}-{pick.get('original_roster_id')}",
-                "name": label, "value": benchmark["value"],
+                "name": label, "value": round(value),
                 "season": pick.get("season"), "round": pick.get("round"),
                 "original_roster_id": pick.get("original_roster_id"),
-                "valuation": "KTC neutral-mid benchmark",
-                "assumption": "Pick quality is unknown; Mid is a neutral liquidity benchmark.",
+                "valuation": "Probability-weighted KTC early/mid/late pick value",
+                "pick_projection": {
+                    "probabilities": probabilities,
+                    "most_likely_bucket": likely_bucket,
+                    "confidence": outlook.get("confidence", "low"),
+                    "method": outlook.get("method", "neutral mid fallback"),
+                },
+                "assumption": "Pick slot is projected from the original roster's strength and remains uncertain.",
             })
     return assets
 
@@ -77,14 +95,24 @@ def search_trade_packages(
     seller_profile = (manager_profiles or {}).get(seller_user_id) or {}
     tendencies = seller_profile.get("derived_tendencies") or {}
 
-    assets = sorted(team_assets(buyer, ktc_index), key=lambda a: a["value"], reverse=True)
+    has_picks = any(team.get("draft_picks") for team in teams)
+    outlook_by_roster = (
+        {item["original_roster_id"]: item for item in pick_outlooks(league_analysis)}
+        if has_picks else {}
+    )
+    assets = sorted(
+        team_assets(buyer, ktc_index, outlook_by_roster),
+        key=lambda a: a["value"], reverse=True,
+    )
     known_ids = {asset["id"] for asset in assets}
     missing = include_ids - known_ids
     if missing:
         raise ValueError(f"required asset not found on buyer roster: {', '.join(sorted(missing))}")
     assets = [asset for asset in assets if asset["id"] not in exclude_ids]
     # Keep the search systematic but bounded for API latency and intelligibility.
-    candidates = assets[:24]
+    player_candidates = [asset for asset in assets if asset["asset_type"] == "player"][:20]
+    pick_candidates = [asset for asset in assets if asset["asset_type"] == "pick"]
+    candidates = player_candidates + pick_candidates
     for required in (asset for asset in assets if asset["id"] in include_ids):
         if required not in candidates:
             candidates.append(required)
@@ -152,7 +180,7 @@ def search_trade_packages(
             }
             if in_standard_range:
                 packages.append(package)
-            else:
+            elif ratio < 0.72:
                 near_misses.append(package)
     if include_ids and not packages:
         near_misses.sort(key=lambda package: abs(1 - package["value_ratio"]))
@@ -179,6 +207,7 @@ def search_trade_packages(
         return choice
 
     used_near_miss = bool(packages and all(p["outside_standard_range"] for p in packages))
+    no_safe_packages = not packages
     recommendations = {
         "opening_offer": pick_unique(0.88, 0.98, 0.93, min_assets),
         "fair_value": pick_unique(0.98, 1.08, 1.03),
@@ -202,9 +231,13 @@ def search_trade_packages(
         },
         "constraint_status": {
             "used_closest_packages": used_near_miss,
+            "no_safe_packages": no_safe_packages,
             "message": (
+                "No package of this exact size stays at or below 130% of the target's KTC value. "
+                "Try fewer assets or include a projected pick; the finder will not recommend a severe overpay."
+                if no_safe_packages else
                 "No package with the required asset lands inside the normal 72%-130% KTC search range. "
-                "Showing the closest constructions so you can see whether it creates an underpay or overpay."
+                "Showing only the closest underpay constructions; packages above 130% are blocked as unhelpful overpays."
                 if used_near_miss else
                 "Packages satisfy the selected constraints and the normal KTC search range."
             ),
@@ -212,7 +245,7 @@ def search_trade_packages(
         "recommendations": recommendations,
         "ranked_packages": packages[:20],
         "methodology": {
-            "measured": "KTC benchmark values and roster positional market composition",
+            "measured": "KTC player values, probability-weighted early/mid/late KTC pick values, and roster composition",
             "heuristics": (
                 "40% value fairness, 25% seller incentive, 15% buyer positional "
                 "need, 20% optimized-lineup market impact"
