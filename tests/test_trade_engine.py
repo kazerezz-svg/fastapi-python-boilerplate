@@ -74,7 +74,27 @@ def test_required_asset_returns_closest_package_when_outside_normal_band():
          "analysis": {"measured": {"ktc_value_by_position": {"WR": 6000}}}},
     ]}
     result = search_trade_packages(analysis, "t", 1, {}, include_asset_ids=["x"])
-    assert result["recommendations"]["fair_value"]
-    assert result["recommendations"]["fair_value"]["outside_standard_range"] is True
+    offers = [offer for offer in result["recommendations"].values() if offer]
+    assert offers
+    assert offers[0]["outside_standard_range"] is True
     assert result["constraint_status"]["used_closest_packages"] is True
+
+
+def test_recommendation_slots_are_unique_and_exact_size_is_honored():
+    target = {"player_id": "t", "name": "Target", "position": "WR", "market": {"value": 6000}}
+    players = [
+        {"player_id": str(i), "name": f"Asset {i}", "position": "RB", "market": {"value": value}}
+        for i, value in enumerate([2500, 2200, 1800, 1600, 1400], 1)
+    ]
+    analysis = {"lineup_slots": ["RB", "WR"], "teams": [
+        {"roster_id": 1, "manager": {}, "players": players, "draft_picks": [],
+         "analysis": {"measured": {"ktc_value_by_position": {"RB": 9500}}}},
+        {"roster_id": 2, "manager": {}, "players": [target], "draft_picks": [],
+         "analysis": {"measured": {"ktc_value_by_position": {"WR": 6000}}}},
+    ]}
+    result = search_trade_packages(analysis, "t", 1, {}, min_assets=3, max_assets=3)
+    offers = [offer for offer in result["recommendations"].values() if offer]
+    signatures = [tuple(asset["id"] for asset in offer["assets"]) for offer in offers]
+    assert all(len(signature) == 3 for signature in signatures)
+    assert len(signatures) == len(set(signatures))
 

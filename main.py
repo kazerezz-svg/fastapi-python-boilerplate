@@ -987,7 +987,7 @@ async def player_analysis_endpoint(player_id: str):
 async def trade_search_endpoint(
     target_player_id: str, buyer_roster_id: int | None = None,
     include_asset_ids: str | None = None, exclude_asset_ids: str | None = None,
-    package_style: str = "balanced", max_assets: int = 2,
+    package_style: str = "balanced", min_assets: int = 1, max_assets: int = 2,
 ):
     league, context, projections, history = await asyncio.gather(
         league_map(), fetch_external_context(), fetch_projections(), history_endpoint()
@@ -1005,7 +1005,7 @@ async def trade_search_endpoint(
             analysis, target_player_id, buyer_roster_id, ktc_index, profiles,
             [value for value in (include_asset_ids or "").split(",") if value],
             [value for value in (exclude_asset_ids or "").split(",") if value],
-            package_style, max_assets,
+            package_style, min_assets, max_assets,
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
@@ -1028,12 +1028,12 @@ async def manager_behavior_endpoint():
 async def player_recommendation_endpoint(
     target_player_id: str, include_asset_ids: str | None = None,
     exclude_asset_ids: str | None = None, package_style: str = "balanced",
-    max_assets: int = 2,
+    min_assets: int = 1, max_assets: int = 2,
 ):
     trade = await trade_search_endpoint(
         target_player_id, include_asset_ids=include_asset_ids,
         exclude_asset_ids=exclude_asset_ids, package_style=package_style,
-        max_assets=max_assets,
+        min_assets=min_assets, max_assets=max_assets,
     )
     opening = trade["recommendations"].get("opening_offer")
     fair = trade["recommendations"].get("fair_value")
