@@ -63,3 +63,18 @@ def test_trade_search_honors_required_protected_and_style_constraints():
         assert "must" in ids and "protect" not in ids and len(ids) >= 2
     assert result["constraints_applied"]["package_style"] == "two_for_one"
 
+
+def test_required_asset_returns_closest_package_when_outside_normal_band():
+    target = {"player_id": "t", "name": "Target", "position": "WR", "market": {"value": 6000}}
+    expensive = {"player_id": "x", "name": "Expensive", "position": "RB", "market": {"value": 9000}}
+    analysis = {"lineup_slots": ["RB", "WR"], "teams": [
+        {"roster_id": 1, "manager": {}, "players": [expensive], "draft_picks": [],
+         "analysis": {"measured": {"ktc_value_by_position": {"RB": 9000}}}},
+        {"roster_id": 2, "manager": {}, "players": [target], "draft_picks": [],
+         "analysis": {"measured": {"ktc_value_by_position": {"WR": 6000}}}},
+    ]}
+    result = search_trade_packages(analysis, "t", 1, {}, include_asset_ids=["x"])
+    assert result["recommendations"]["fair_value"]
+    assert result["recommendations"]["fair_value"]["outside_standard_range"] is True
+    assert result["constraint_status"]["used_closest_packages"] is True
+
