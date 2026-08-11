@@ -34,7 +34,13 @@ def team_assets(team, ktc_index, pick_outlook_by_roster=None):
         value = sum(probabilities.get(bucket, 0) * bucket_values[bucket] for bucket in bucket_values)
         if not value and bucket_values:
             value = bucket_values.get(likely_bucket) or bucket_values.get("mid") or next(iter(bucket_values.values()))
-        label = _pick_label(pick, likely_bucket.title())
+        original_owner = (
+            pick.get("original_owner_team")
+            or pick.get("original_owner_username")
+            or f"Roster {pick.get('original_roster_id')}"
+        )
+        benchmark_label = _pick_label(pick, likely_bucket.title())
+        label = f"{benchmark_label} Â· from {original_owner}"
         if value:
             assets.append({
                 "asset_type": "pick",
@@ -42,6 +48,7 @@ def team_assets(team, ktc_index, pick_outlook_by_roster=None):
                 "name": label, "value": round(value),
                 "season": pick.get("season"), "round": pick.get("round"),
                 "original_roster_id": pick.get("original_roster_id"),
+                "original_owner": original_owner,
                 "valuation": "Probability-weighted KTC early/mid/late pick value",
                 "pick_projection": {
                     "probabilities": probabilities,
