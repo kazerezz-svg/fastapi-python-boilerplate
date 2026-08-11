@@ -23,11 +23,20 @@ def normalize_name(name):
     return re.sub(r"[^a-z0-9]", "", value.lower())
 
 
+def canonical_player_name(name):
+    """Normalize common provider differences such as Jr. and III suffixes."""
+    value = normalize_name(name)
+    return re.sub(r"(?:jr|sr|ii|iii|iv|v)$", "", value)
+
+
 def build_external_indexes(context):
     sources = context.get("sources") or {}
     data = lambda key: (sources.get(key) or {}).get("data") or []
     return {
         "ktc": {normalize_name(row.get("name")): row for row in data("ktc")},
+        "ktc_canonical": {
+            canonical_player_name(row.get("name")): row for row in data("ktc")
+        },
         "ol": {normalize_team(row.get("team")): row for row in data("offensive_lines")},
         "sos_1_13": {normalize_team(row.get("team")): row for row in data("weeks_1_13")},
         "sos_1_17": {normalize_team(row.get("team")): row for row in data("weeks_1_17")},
@@ -37,7 +46,10 @@ def build_external_indexes(context):
 def enrich_player(player, indexes):
     team = normalize_team(player.get("team"))
     position = player.get("position")
-    ktc = indexes["ktc"].get(normalize_name(player.get("name")))
+    ktc = (
+        indexes["ktc"].get(normalize_name(player.get("name")))
+        or indexes["ktc_canonical"].get(canonical_player_name(player.get("name")))
+    )
     return {
         **player,
         "normalized_team": team,
@@ -75,12 +87,17 @@ def build_projection_indexes(projections):
     return {
         "by_id": {str(row["player_id"]): row for row in rows if row.get("player_id")},
         "by_name": {normalize_name(row.get("name")): row for row in rows if row.get("name")},
+        "by_canonical_name": {
+            canonical_player_name(row.get("name")): row for row in rows if row.get("name")
+        },
     }
 
 
 def summarize_team(team, indexes, projection_indexes=None):
     players = [enrich_player(player, indexes) for player in team.get("players") or []]
-    projection_indexes = projection_indexes or {"by_id": {}, "by_name": {}}
+    projection_indexes = projection_indexes or {
+        "by_id": {}, "by_name": {}, "by_canonical_name": {},
+    }
     position_values = defaultdict(int)
     total_value = starter_value = matched = 0
     projected_starter_points = 0.0
@@ -93,6 +110,9 @@ def summarize_team(team, indexes, projection_indexes=None):
             projection = (
                 projection_indexes["by_id"].get(str(player.get("player_id")))
                 or projection_indexes["by_name"].get(normalize_name(player.get("name")))
+                or projection_indexes["by_canonical_name"].get(
+                    canonical_player_name(player.get("name"))
+                )
             )
             if projection and isinstance(projection.get("projected_points"), (int, float)):
                 projected_starters_matched += 1
@@ -259,3 +279,4 @@ def build_league_analysis(league_map, context, projections=None):
         },
         "teams": teams,
     }
+
