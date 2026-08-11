@@ -46,7 +46,7 @@ def _position_need(team, position):
 def search_trade_packages(
     league_analysis, target_player_id, buyer_roster_id, ktc_index,
     manager_profiles=None, include_asset_ids=None, exclude_asset_ids=None,
-    package_style="balanced", max_assets=2,
+    package_style="balanced", min_assets=1, max_assets=2,
 ):
     include_ids = {str(value) for value in (include_asset_ids or []) if value}
     exclude_ids = {str(value) for value in (exclude_asset_ids or []) if value}
@@ -56,6 +56,7 @@ def search_trade_packages(
     if package_style not in valid_styles:
         raise ValueError("package_style must be balanced, picks_heavy, players_heavy, or two_for_one")
     max_assets = max(1, min(int(max_assets), 3))
+    min_assets = max(1, min(int(min_assets), max_assets))
     teams = league_analysis.get("teams") or []
     buyer = next((t for t in teams if t.get("roster_id") == buyer_roster_id), None)
     seller = None
@@ -89,7 +90,7 @@ def search_trade_packages(
             candidates.append(required)
     packages = []
     near_misses = []
-    for size in range(1, max_assets + 1):
+    for size in range(min_assets, max_assets + 1):
         for combo in itertools.combinations(candidates, size):
             combo_ids = {asset["id"] for asset in combo}
             if not include_ids.issubset(combo_ids):
@@ -158,13 +159,32 @@ def search_trade_packages(
         packages = near_misses[:20]
     packages.sort(key=lambda package: package["score"], reverse=True)
 
-    def best(low, high, anchor):
-        match = next((p for p in packages if low <= p["value_ratio"] <= high), None)
-        if match or not include_ids or not packages:
-            return match
-        return min(packages, key=lambda package: abs(anchor - package["value_ratio"]))
+    used_signatures = set()
+
+    def pick_unique(low, high, anchor, prefer_size=None):
+        available = [
+            package for package in packages
+            if tuple(asset["id"] for asset in package["assets"]) not in used_signatures
+        ]
+        if prefer_size:
+            sized = [package for package in available if len(package["assets"]) == prefer_size]
+            if sized:
+                available = sized
+        in_band = [package for package in available if low <= package["value_ratio"] <= high]
+        pool = in_band or (available if include_ids else [])
+        if not pool:
+            return None
+        choice = min(pool, key=lambda package: (abs(anchor - package["value_ratio"]), -package["score"]))
+        used_signatures.add(tuple(asset["id"] for asset in choice["assets"]))
+        return choice
 
     used_near_miss = bool(packages and all(p["outside_standard_range"] for p in packages))
+    recommendations = {
+        "opening_offer": pick_unique(0.88, 0.98, 0.93, min_assets),
+        "fair_value": pick_unique(0.98, 1.08, 1.03),
+        "plausible_counter": pick_unique(1.00, 1.12, 1.06, max_assets),
+        "walk_away_price": pick_unique(1.08, 1.18, 1.13),
+    }
 
     return {
         "target": {
@@ -177,6 +197,7 @@ def search_trade_packages(
             "include_asset_ids": sorted(include_ids),
             "exclude_asset_ids": sorted(exclude_ids),
             "package_style": package_style,
+            "min_assets": min_assets,
             "max_assets": max_assets,
         },
         "constraint_status": {
@@ -188,12 +209,7 @@ def search_trade_packages(
                 "Packages satisfy the selected constraints and the normal KTC search range."
             ),
         },
-        "recommendations": {
-            "opening_offer": best(0.88, 0.98, 0.93),
-            "fair_value": best(0.98, 1.08, 1.03),
-            "walk_away_price": best(1.08, 1.18, 1.13),
-            "plausible_counter": best(1.00, 1.12, 1.06),
-        },
+        "recommendations": recommendations,
         "ranked_packages": packages[:20],
         "methodology": {
             "measured": "KTC benchmark values and roster positional market composition",
@@ -201,7 +217,7 @@ def search_trade_packages(
                 "40% value fairness, 25% seller incentive, 15% buyer positional "
                 "need, 20% optimized-lineup market impact"
             ),
-            "limits": f"One- through {max_assets}-asset combinations from the buyer's top valued assets.",
+            "limits": f"{min_assets}- through {max_assets}-asset combinations from the buyer's top valued assets; displayed recommendations are unique.",
             "manager_history": {
                 "seller_sample_size": seller_profile.get("completed_trades", 0),
                 "tendencies": tendencies,
