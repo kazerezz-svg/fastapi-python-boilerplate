@@ -1,5 +1,6 @@
 """Bounded trade-package generation with transparent value and fit heuristics."""
 import itertools
+from datetime import datetime, timezone
 
 from analysis_engine import normalize_name
 from intelligence import pick_outlooks
@@ -24,6 +25,12 @@ def team_assets(team, ktc_index, pick_outlook_by_roster=None):
     for pick in team.get("draft_picks") or []:
         outlook = (pick_outlook_by_roster or {}).get(pick.get("original_roster_id")) or {}
         probabilities = outlook.get("probabilities") or {"early": 0, "mid": 1, "late": 0}
+        far_future = int(pick.get("season") or 0) >= datetime.now(timezone.utc).year + 3
+        if far_future:
+            probabilities = {
+                bucket: round(0.25 * probabilities.get(bucket, 0) + 0.75 / 3, 3)
+                for bucket in ("early", "mid", "late")
+            }
         bucket_values = {}
         for bucket in ("early", "mid", "late"):
             bucket_label = _pick_label(pick, bucket.title())
@@ -53,8 +60,11 @@ def team_assets(team, ktc_index, pick_outlook_by_roster=None):
                 "pick_projection": {
                     "probabilities": probabilities,
                     "most_likely_bucket": likely_bucket,
-                    "confidence": outlook.get("confidence", "low"),
-                    "method": outlook.get("method", "neutral mid fallback"),
+                    "confidence": "low" if far_future else outlook.get("confidence", "low"),
+                    "method": (
+                        "far-future estimate flattened 75% toward equal early/mid/late odds"
+                        if far_future else outlook.get("method", "neutral mid fallback")
+                    ),
                 },
                 "assumption": "Pick slot is projected from the original roster's strength and remains uncertain.",
             })
