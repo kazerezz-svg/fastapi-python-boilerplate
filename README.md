@@ -80,3 +80,5 @@ runs every six hours after the repository secret API_BASE_URL is configured.
 - Lineup impact currently uses optimized KTC market value.
 - Every sourced or heuristic field is labeled in API responses.
 
+
+Deployment verification: two-sided-v1.
