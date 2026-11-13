@@ -1,7 +1,7 @@
 {
   "external_context": {
     "cache": {
-      "fetched_at": "2026-11-12T19:54:16.387429+00:00",
+      "fetched_at": "2026-11-13T06:45:57.527577+00:00",
       "status": "miss"
     },
     "coverage": {
@@ -805,9 +805,9 @@
         "url": "https://fftoolbox.fulltimefantasy.com/football/strength_of_schedule.cfm?type=e"
       }
     },
-    "updated_at": "2026-11-12T19:54:16.387429+00:00"
+    "updated_at": "2026-11-13T06:45:57.527577+00:00"
   },
-  "generated_at": "2026-11-12T19:54:18.621305+00:00",
+  "generated_at": "2026-11-13T06:46:00.157721+00:00",
   "history": {
     "data_provenance": "measured_linked_sleeper_leagues",
     "league_chain": [
@@ -822,10 +822,62 @@
     ],
     "season_counts": {
       "2025": 198,
-      "2026": 323
+      "2026": 325
     },
-    "transaction_count": 521,
+    "transaction_count": 523,
     "transactions": [
+      {
+        "adds": [
+          {
+            "player_id": "7562",
+            "player_name": "Tutu Atwell",
+            "roster_id": 5
+          }
+        ],
+        "created": 1794525136920,
+        "draft_picks": [],
+        "drops": [],
+        "league_id": "1337530303182290944",
+        "managers": [
+          {
+            "roster_id": 5,
+            "team_name": "You got a Purdy mouth",
+            "user_id": "981742395291238400",
+            "username": "CowchPotatoChip"
+          }
+        ],
+        "season": "2026",
+        "transaction_id": "1426745469668687872",
+        "type": "free_agent",
+        "waiver_budget": [],
+        "week": 10
+      },
+      {
+        "adds": [],
+        "created": 1794525070276,
+        "draft_picks": [],
+        "drops": [
+          {
+            "player_id": "7083",
+            "player_name": "Tyler Huntley",
+            "roster_id": 5
+          }
+        ],
+        "league_id": "1337530303182290944",
+        "managers": [
+          {
+            "roster_id": 5,
+            "team_name": "You got a Purdy mouth",
+            "user_id": "981742395291238400",
+            "username": "CowchPotatoChip"
+          }
+        ],
+        "season": "2026",
+        "transaction_id": "1426745190147706880",
+        "type": "free_agent",
+        "waiver_budget": [],
+        "week": 10
+      },
       {
         "adds": [],
         "created": 1794412088988,
@@ -17110,7 +17162,7 @@
         "week": 1
       }
     ],
-    "updated_at": "2026-11-12T19:54:16.249021+00:00",
+    "updated_at": "2026-11-13T06:45:57.421397+00:00",
     "validation": {
       "duplicate_transaction_ids": 0,
       "unmapped_manager_references": 0,
@@ -17984,7 +18036,7 @@
             "years_exp": 4
           },
           {
-            "age": 23,
+            "age": 24,
             "injury_status": null,
             "name": "Kyle Williams",
             "player_id": "12547",
@@ -18083,12 +18135,12 @@
           },
           "WR": {
             "age_24_or_younger": 3,
-            "average_age": 25.83,
+            "average_age": 25.92,
             "count": 12,
             "starter_count": 4
           },
           "overall": {
-            "average_age": 25.97,
+            "average_age": 26.0,
             "player_count": 30
           }
         },
@@ -18672,7 +18724,7 @@
           },
           {
             "age": 28,
-            "injury_status": "Questionable",
+            "injury_status": null,
             "name": "Justin Herbert",
             "player_id": "6797",
             "position": "QB",
@@ -19206,8 +19258,8 @@
         },
         "owner_behavior": {
           "completed_trades": 6,
-          "completed_transactions": 25,
-          "free_agent_moves": 18,
+          "completed_transactions": 27,
+          "free_agent_moves": 20,
           "most_common_trade_partners": [
             {
               "manager": "Byebyesleepyjoe",
@@ -19297,17 +19349,6 @@
             "years_exp": 11
           },
           {
-            "age": 28,
-            "injury_status": "IR",
-            "name": "Tyler Huntley",
-            "player_id": "7083",
-            "position": "QB",
-            "roster_slot": "reserve",
-            "status": "Inactive",
-            "team": "BAL",
-            "years_exp": 6
-          },
-          {
             "age": 22,
             "injury_status": null,
             "name": "Ashton Jeanty",
@@ -19331,7 +19372,7 @@
           },
           {
             "age": 29,
-            "injury_status": null,
+            "injury_status": "Questionable",
             "name": "Tony Pollard",
             "player_id": "5967",
             "position": "RB",
@@ -19375,7 +19416,7 @@
           },
           {
             "age": 28,
-            "injury_status": "Doubtful",
+            "injury_status": "Questionable",
             "name": "Rhamondre Stevenson",
             "player_id": "7611",
             "position": "RB",
@@ -19408,7 +19449,7 @@
           },
           {
             "age": 27,
-            "injury_status": "Questionable",
+            "injury_status": null,
             "name": "Tank Dell",
             "player_id": "9502",
             "position": "WR",
@@ -19473,6 +19514,17 @@
             "years_exp": 1
           },
           {
+            "age": 27,
+            "injury_status": null,
+            "name": "Tutu Atwell",
+            "player_id": "7562",
+            "position": "WR",
+            "roster_slot": "bench",
+            "status": "Active",
+            "team": "LAR",
+            "years_exp": 5
+          },
+          {
             "age": 26,
             "injury_status": "IR",
             "name": "Tyquan Thornton",
@@ -19500,7 +19552,7 @@
             "name": "David Njoku",
             "player_id": "4033",
             "position": "TE",
-            "roster_slot": "bench",
+            "roster_slot": "reserve",
             "status": "Inactive",
             "team": "LAC",
             "years_exp": 9
@@ -19554,8 +19606,8 @@
         "roster_profile": {
           "QB": {
             "age_24_or_younger": 1,
-            "average_age": 27.86,
-            "count": 7,
+            "average_age": 27.83,
+            "count": 6,
             "starter_count": 2
           },
           "RB": {
@@ -19572,12 +19624,12 @@
           },
           "WR": {
             "age_24_or_younger": 4,
-            "average_age": 25.33,
-            "count": 9,
+            "average_age": 25.5,
+            "count": 10,
             "starter_count": 4
           },
           "overall": {
-            "average_age": 26.03,
+            "average_age": 26.0,
             "player_count": 29
           }
         },
@@ -20274,17 +20326,6 @@
             "years_exp": 0
           },
           {
-            "age": 22,
-            "injury_status": null,
-            "name": "Braelon Allen",
-            "player_id": "11576",
-            "position": "RB",
-            "roster_slot": "starter",
-            "status": "Active",
-            "team": "NYJ",
-            "years_exp": 2
-          },
-          {
             "age": 28,
             "injury_status": null,
             "name": "Jaylen Warren",
@@ -20305,6 +20346,17 @@
             "status": "Active",
             "team": "CLE",
             "years_exp": 1
+          },
+          {
+            "age": 22,
+            "injury_status": null,
+            "name": "Braelon Allen",
+            "player_id": "11576",
+            "position": "RB",
+            "roster_slot": "bench",
+            "status": "Active",
+            "team": "NYJ",
+            "years_exp": 2
           },
           {
             "age": 25,
@@ -20483,8 +20535,19 @@
             "years_exp": 4
           },
           {
-            "age": 27,
+            "age": 28,
             "injury_status": null,
+            "name": "Pat Freiermuth",
+            "player_id": "7600",
+            "position": "TE",
+            "roster_slot": "starter",
+            "status": "Active",
+            "team": "PIT",
+            "years_exp": 5
+          },
+          {
+            "age": 27,
+            "injury_status": "Questionable",
             "name": "Chig Okonkwo",
             "player_id": "8210",
             "position": "TE",
@@ -20516,17 +20579,6 @@
             "years_exp": 6
           },
           {
-            "age": 28,
-            "injury_status": null,
-            "name": "Pat Freiermuth",
-            "player_id": "7600",
-            "position": "TE",
-            "roster_slot": "bench",
-            "status": "Active",
-            "team": "PIT",
-            "years_exp": 5
-          },
-          {
             "age": 26,
             "injury_status": null,
             "name": "Tommy Tremble",
@@ -20550,13 +20602,13 @@
             "age_24_or_younger": 3,
             "average_age": 24.5,
             "count": 6,
-            "starter_count": 3
+            "starter_count": 2
           },
           "TE": {
             "age_24_or_younger": 0,
             "average_age": 27.33,
             "count": 6,
-            "starter_count": 1
+            "starter_count": 2
           },
           "WR": {
             "age_24_or_younger": 5,
@@ -20673,7 +20725,7 @@
         "players": [
           {
             "age": 32,
-            "injury_status": "Questionable",
+            "injury_status": null,
             "name": "Jared Goff",
             "player_id": "3163",
             "position": "QB",
@@ -20926,18 +20978,18 @@
           },
           {
             "age": 25,
-            "injury_status": "Out",
+            "injury_status": "IR",
             "name": "Puka Nacua",
             "player_id": "9493",
             "position": "WR",
             "roster_slot": "bench",
-            "status": "Active",
+            "status": "Inactive",
             "team": "LAR",
             "years_exp": 3
           },
           {
             "age": 26,
-            "injury_status": null,
+            "injury_status": "Questionable",
             "name": "Rashod Bateman",
             "player_id": "7571",
             "position": "WR",
@@ -21236,7 +21288,7 @@
           },
           {
             "age": 31,
-            "injury_status": "Questionable",
+            "injury_status": null,
             "name": "Alvin Kamara",
             "player_id": "4035",
             "position": "RB",
@@ -21247,7 +21299,7 @@
           },
           {
             "age": 24,
-            "injury_status": null,
+            "injury_status": "Questionable",
             "name": "Keaton Mitchell",
             "player_id": "9511",
             "position": "RB",
@@ -21500,7 +21552,7 @@
           },
           {
             "age": 28,
-            "injury_status": "Questionable",
+            "injury_status": null,
             "name": "Noah Fant",
             "player_id": "5857",
             "position": "TE",
@@ -22446,7 +22498,7 @@
           },
           {
             "age": 24,
-            "injury_status": null,
+            "injury_status": "Questionable",
             "name": "Tre' Harris",
             "player_id": "12509",
             "position": "WR",
@@ -22916,7 +22968,7 @@
           },
           {
             "age": 33,
-            "injury_status": null,
+            "injury_status": "Questionable",
             "name": "Tyler Higbee",
             "player_id": "3271",
             "position": "TE",
@@ -22968,11 +23020,11 @@
         }
       }
     ],
-    "updated_at": "2026-11-12T19:54:15.787988+00:00"
+    "updated_at": "2026-11-13T06:45:56.931325+00:00"
   },
   "projections": {
     "cache": {
-      "fetched_at": "2026-11-12T19:54:16.872381+00:00",
+      "fetched_at": "2026-11-13T06:45:58.102016+00:00",
       "refresh_interval_hours": 6,
       "status": "miss"
     },
@@ -22991,18 +23043,6 @@
         "redraft_value": 100.0
       },
       {
-        "ceiling_points": 201.0,
-        "consensus_projected_points": 291.0,
-        "floor_points": 132.0,
-        "name": "Amon-Ra St. Brown",
-        "position": "WR",
-        "projected_points": 161.0,
-        "projection_provider": "Draft Sharks 3D projections",
-        "redraft_adp": 0.0,
-        "redraft_rank": 7,
-        "redraft_value": 77.0
-      },
-      {
         "ceiling_points": 206.0,
         "consensus_projected_points": 306.0,
         "floor_points": 143.0,
@@ -23015,6 +23055,18 @@
         "redraft_value": 86.0
       },
       {
+        "ceiling_points": 234.0,
+        "consensus_projected_points": 344.0,
+        "floor_points": 166.0,
+        "name": "Josh Allen",
+        "position": "QB",
+        "projected_points": 198.0,
+        "projection_provider": "Draft Sharks 3D projections",
+        "redraft_adp": 0.0,
+        "redraft_rank": 12,
+        "redraft_value": 53.0
+      },
+      {
         "ceiling_points": 208.0,
         "consensus_projected_points": 300.0,
         "floor_points": 148.0,
@@ -23025,6 +23077,18 @@
         "redraft_adp": 0.0,
         "redraft_rank": 4,
         "redraft_value": 86.0
+      },
+      {
+        "ceiling_points": 201.0,
+        "consensus_projected_points": 291.0,
+        "floor_points": 132.0,
+        "name": "Amon-Ra St. Brown",
+        "position": "WR",
+        "projected_points": 161.0,
+        "projection_provider": "Draft Sharks 3D projections",
+        "redraft_adp": 0.0,
+        "redraft_rank": 7,
+        "redraft_value": 77.0
       },
       {
         "ceiling_points": 200.0,
@@ -23051,18 +23115,6 @@
         "redraft_value": 88.0
       },
       {
-        "ceiling_points": 234.0,
-        "consensus_projected_points": 344.0,
-        "floor_points": 166.0,
-        "name": "Josh Allen",
-        "position": "QB",
-        "projected_points": 198.0,
-        "projection_provider": "Draft Sharks 3D projections",
-        "redraft_adp": 0.0,
-        "redraft_rank": 12,
-        "redraft_value": 53.0
-      },
-      {
         "ceiling_points": 205.0,
         "consensus_projected_points": 322.0,
         "floor_points": 142.0,
@@ -23079,7 +23131,7 @@
         "position": "RB",
         "projected_points": 155.61,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 12.27
+        "redraft_adp": 12.3
       },
       {
         "ceiling_points": 228.0,
@@ -23122,7 +23174,7 @@
         "position": "TE",
         "projected_points": 66.16,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 19.89
+        "redraft_adp": 19.96
       },
       {
         "ceiling_points": 159.0,
@@ -23133,7 +23185,7 @@
         "projected_points": 125.0,
         "projection_provider": "Draft Sharks 3D projections",
         "redraft_adp": 0.0,
-        "redraft_rank": 20,
+        "redraft_rank": 21,
         "redraft_value": 41.0
       },
       {
@@ -23141,14 +23193,14 @@
         "position": "RB",
         "projected_points": 105.22,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 25.26
+        "redraft_adp": 25.42
       },
       {
         "name": "Kyren Williams",
         "position": "RB",
         "projected_points": 102.63,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 35.22
+        "redraft_adp": 35.24
       },
       {
         "ceiling_points": 154.0,
@@ -23159,11 +23211,11 @@
         "projected_points": 126.0,
         "projection_provider": "Draft Sharks 3D projections",
         "redraft_adp": 0.0,
-        "redraft_rank": 22,
+        "redraft_rank": 20,
         "redraft_value": 41.0
       },
       {
-        "ceiling_points": 193.0,
+        "ceiling_points": 192.0,
         "consensus_projected_points": 197.0,
         "floor_points": 120.0,
         "name": "Malik Nabers",
@@ -23183,7 +23235,7 @@
         "projected_points": 124.0,
         "projection_provider": "Draft Sharks 3D projections",
         "redraft_adp": 0.0,
-        "redraft_rank": 21,
+        "redraft_rank": 22,
         "redraft_value": 41.0
       },
       {
@@ -23199,67 +23251,60 @@
         "redraft_value": 41.0
       },
       {
+        "name": "Joe Burrow",
+        "position": "QB",
+        "projected_points": 194.38,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 31.97
+      },
+      {
         "name": "Ashton Jeanty",
         "position": "RB",
         "projected_points": 88.54,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 32.14
-      },
-      {
-        "name": "Joe Burrow",
-        "position": "QB",
-        "projected_points": 194.37,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 32.1
+        "redraft_adp": 32.3
       },
       {
         "name": "Zay Flowers",
         "position": "WR",
         "projected_points": 63.32,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 48.95
+        "redraft_adp": 48.9
       },
       {
         "name": "Drake Maye",
         "position": "QB",
-        "projected_points": 173.75,
+        "projected_points": 173.7,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 50.17
-      },
-      {
-        "name": "Nico Collins",
-        "position": "WR",
-        "projected_points": 82.28,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 35.22
+        "redraft_adp": 50.28
       },
       {
         "name": "Brock Purdy",
         "position": "QB",
         "projected_points": 169.85,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 59.04
+        "redraft_adp": 58.9
+      },
+      {
+        "name": "Nico Collins",
+        "position": "WR",
+        "projected_points": 82.28,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 35.34
       },
       {
         "name": "George Kittle",
         "position": "TE",
         "projected_points": 86.29,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 51.08
+        "redraft_adp": 51.05
       },
       {
         "name": "Chase Brown",
         "position": "RB",
         "projected_points": 95.1,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 27.04
-      },
-      {
-        "name": "Tetairoa McMillan",
-        "position": "WR",
-        "projected_points": 90.49,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 48.51
+        "redraft_adp": 27.22
       },
       {
         "ceiling_points": 191.0,
@@ -23274,11 +23319,18 @@
         "redraft_value": 60.0
       },
       {
+        "name": "Tetairoa McMillan",
+        "position": "WR",
+        "projected_points": 90.49,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 48.55
+      },
+      {
         "name": "George Pickens",
         "position": "WR",
-        "projected_points": 60.48,
+        "projected_points": 60.53,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 49.33
+        "redraft_adp": 49.53
       },
       {
         "ceiling_points": 176.0,
@@ -23289,7 +23341,7 @@
         "projected_points": 122.0,
         "projection_provider": "Draft Sharks 3D projections",
         "redraft_adp": 0.0,
-        "redraft_rank": 17,
+        "redraft_rank": 16,
         "redraft_value": 44.0
       },
       {
@@ -23297,14 +23349,7 @@
         "position": "RB",
         "projected_points": 101.29,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 44.11
-      },
-      {
-        "name": "Garrett Wilson",
-        "position": "WR",
-        "projected_points": 61.46,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 56.03
+        "redraft_adp": 44.62
       },
       {
         "ceiling_points": 161.0,
@@ -23319,23 +23364,23 @@
         "redraft_value": 42.0
       },
       {
-        "ceiling_points": 177.0,
+        "name": "Garrett Wilson",
+        "position": "WR",
+        "projected_points": 61.46,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 56.11
+      },
+      {
+        "ceiling_points": 176.0,
         "consensus_projected_points": 166.0,
-        "floor_points": 107.0,
+        "floor_points": 106.0,
         "name": "Chuba Hubbard",
         "position": "RB",
         "projected_points": 132.0,
         "projection_provider": "Draft Sharks 3D projections",
         "redraft_adp": 0.0,
         "redraft_rank": 13,
-        "redraft_value": 48.0
-      },
-      {
-        "name": "Saquon Barkley",
-        "position": "RB",
-        "projected_points": 91.7,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 34.66
+        "redraft_value": 47.0
       },
       {
         "ceiling_points": 169.0,
@@ -23350,6 +23395,13 @@
         "redraft_value": 45.0
       },
       {
+        "name": "Saquon Barkley",
+        "position": "RB",
+        "projected_points": 91.7,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 34.82
+      },
+      {
         "ceiling_points": 175.0,
         "consensus_projected_points": 185.0,
         "floor_points": 107.0,
@@ -23358,7 +23410,7 @@
         "projected_points": 126.0,
         "projection_provider": "Draft Sharks 3D projections",
         "redraft_adp": 0.0,
-        "redraft_rank": 16,
+        "redraft_rank": 17,
         "redraft_value": 44.0
       },
       {
@@ -23366,14 +23418,21 @@
         "position": "TE",
         "projected_points": 42.01,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 68.17
+        "redraft_adp": 68.36
       },
       {
         "name": "Sam LaPorta",
         "position": "TE",
         "projected_points": 57.94,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 85.02
+        "redraft_adp": 85.17
+      },
+      {
+        "name": "Isaiah Likely",
+        "position": "TE",
+        "projected_points": 66.07,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 73.38
       },
       {
         "ceiling_points": 157.0,
@@ -23388,32 +23447,18 @@
         "redraft_value": 39.0
       },
       {
-        "name": "Isaiah Likely",
-        "position": "TE",
-        "projected_points": 66.23,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 73.55
-      },
-      {
         "name": "Rashee Rice",
         "position": "WR",
-        "projected_points": 66.39,
+        "projected_points": 66.38,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 44.23
+        "redraft_adp": 44.46
       },
       {
         "name": "Breece Hall",
         "position": "RB",
         "projected_points": 82.17,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 58.06
-      },
-      {
-        "name": "Colston Loveland",
-        "position": "TE",
-        "projected_points": 58.84,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 51.39
+        "redraft_adp": 58.13
       },
       {
         "ceiling_points": 169.0,
@@ -23428,298 +23473,305 @@
         "redraft_value": 40.0
       },
       {
-        "name": "Jayden Daniels",
-        "position": "QB",
-        "projected_points": 178.0,
+        "name": "Colston Loveland",
+        "position": "TE",
+        "projected_points": 58.84,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 59.15
+        "redraft_adp": 51.63
       },
       {
-        "name": "DeVonta Smith",
-        "position": "WR",
-        "projected_points": 64.2,
+        "name": "Jayden Daniels",
+        "position": "QB",
+        "projected_points": 177.01,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 68.58
+        "redraft_adp": 59.23
       },
       {
         "name": "Trevor Lawrence",
         "position": "QB",
         "projected_points": 177.53,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 78.17
+        "redraft_adp": 78.35
+      },
+      {
+        "name": "DeVonta Smith",
+        "position": "WR",
+        "projected_points": 64.2,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 68.88
       },
       {
         "name": "Jameson Williams",
         "position": "WR",
         "projected_points": 68.24,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 76.61
+        "redraft_adp": 76.83
       },
       {
         "name": "Quinshon Judkins",
         "position": "RB",
         "projected_points": 87.42,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 77.26
+        "redraft_adp": 77.51
+      },
+      {
+        "name": "Travis Kelce",
+        "position": "TE",
+        "projected_points": 62.35,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 93.72
       },
       {
         "name": "Luther Burden III",
         "position": "WR",
         "projected_points": 72.11,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 72.29
-      },
-      {
-        "name": "Travis Kelce",
-        "position": "TE",
-        "projected_points": 62.36,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 94.04
-      },
-      {
-        "name": "Emeka Egbuka",
-        "position": "WR",
-        "projected_points": 62.09,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 77.14
-      },
-      {
-        "name": "Josh Jacobs",
-        "position": "RB",
-        "projected_points": 85.24,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 87.42
+        "redraft_adp": 72.48
       },
       {
         "name": "DJ Moore",
         "position": "WR",
         "projected_points": 82.05,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 79.09
+        "redraft_adp": 79.23
+      },
+      {
+        "name": "Emeka Egbuka",
+        "position": "WR",
+        "projected_points": 62.09,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 77.19
       },
       {
         "name": "Mike Evans",
         "position": "WR",
         "projected_points": 69.88,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 96.64
+        "redraft_adp": 96.76
+      },
+      {
+        "name": "Josh Jacobs",
+        "position": "RB",
+        "projected_points": 85.24,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 88.67
       },
       {
         "name": "Dak Prescott",
         "position": "QB",
-        "projected_points": 135.71,
+        "projected_points": 135.66,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 91.4
-      },
-      {
-        "name": "Patrick Mahomes",
-        "position": "QB",
-        "projected_points": 155.6,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 100.78
+        "redraft_adp": 91.46
       },
       {
         "name": "A.J. Brown",
         "position": "WR",
-        "projected_points": 67.49,
+        "projected_points": 76.34,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 52.78
+        "redraft_adp": 52.86
+      },
+      {
+        "name": "Patrick Mahomes",
+        "position": "QB",
+        "projected_points": 155.59,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 100.8
+      },
+      {
+        "name": "Cam Skattebo",
+        "position": "RB",
+        "projected_points": 91.6,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 83.05
       },
       {
         "name": "Tucker Kraft",
         "position": "TE",
         "projected_points": 48.01,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 100.37
-      },
-      {
-        "name": "Cam Skattebo",
-        "position": "RB",
-        "projected_points": 91.63,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 84.04
+        "redraft_adp": 100.68
       },
       {
         "name": "Jordan Love",
         "position": "QB",
         "projected_points": 148.67,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 99.63
-      },
-      {
-        "name": "Rhamondre Stevenson",
-        "position": "RB",
-        "projected_points": 63.56,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 105.71
+        "redraft_adp": 98.77
       },
       {
         "name": "Tony Pollard",
         "position": "RB",
         "projected_points": 122.32,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 86.31
+        "redraft_adp": 86.69
+      },
+      {
+        "name": "Rhamondre Stevenson",
+        "position": "RB",
+        "projected_points": 73.43,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 106.06
       },
       {
         "name": "Harold Fannin Jr.",
         "position": "TE",
         "projected_points": 47.57,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 93.24
+        "redraft_adp": 93.58
+      },
+      {
+        "name": "Ollie Gordon II",
+        "position": "RB",
+        "projected_points": 111.23,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 122.6
       },
       {
         "name": "Jared Goff",
         "position": "QB",
-        "projected_points": 141.73,
+        "projected_points": 141.71,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 120.63
+        "redraft_adp": 121.28
       },
       {
         "name": "Caleb Williams",
         "position": "QB",
         "projected_points": 136.78,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 80.43
-      },
-      {
-        "name": "Ollie Gordon II",
-        "position": "RB",
-        "projected_points": 111.24,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 122.63
+        "redraft_adp": 80.84
       },
       {
         "name": "Matthew Stafford",
         "position": "QB",
         "projected_points": 116.13,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 126.42
+        "redraft_adp": 126.62
       },
       {
         "name": "DK Metcalf",
         "position": "WR",
         "projected_points": 78.05,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 108.61
+        "redraft_adp": 108.72
       },
       {
         "name": "Jalen Coker",
         "position": "WR",
         "projected_points": 61.86,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 123.05
+        "redraft_adp": 123.43
       },
       {
         "name": "Stefon Diggs",
         "position": "WR",
-        "projected_points": 63.62,
+        "projected_points": 63.28,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 109.73
+        "redraft_adp": 109.95
       },
       {
         "name": "Jeremiyah Love",
         "position": "RB",
         "projected_points": 38.99,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 57.28
+        "redraft_adp": 57.47
       },
       {
         "name": "Rome Odunze",
         "position": "WR",
         "projected_points": 60.0,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 98.19
-      },
-      {
-        "name": "Jaylen Waddle",
-        "position": "WR",
-        "projected_points": 62.82,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 98.38
+        "redraft_adp": 98.29
       },
       {
         "name": "Carnell Tate",
         "position": "WR",
         "projected_points": 66.66,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 108.92
-      },
-      {
-        "name": "Omarion Hampton",
-        "position": "RB",
-        "projected_points": 59.41,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 46.51
-      },
-      {
-        "name": "Ladd McConkey",
-        "position": "WR",
-        "projected_points": 57.09,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 89.65
-      },
-      {
-        "name": "Aaron Jones Sr.",
-        "position": "RB",
-        "projected_points": 63.8,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 128.63
-      },
-      {
-        "name": "Blake Corum",
-        "position": "RB",
-        "projected_points": 68.05,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 129.2
-      },
-      {
-        "name": "Kyle Pitts Sr.",
-        "position": "TE",
-        "projected_points": 45.99,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 105.77
+        "redraft_adp": 108.89
       },
       {
         "name": "Zach Charbonnet",
         "position": "RB",
         "projected_points": 82.32,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 147.97
+        "redraft_adp": 147.25
+      },
+      {
+        "name": "Jaylen Waddle",
+        "position": "WR",
+        "projected_points": 62.82,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 98.83
+      },
+      {
+        "name": "Blake Corum",
+        "position": "RB",
+        "projected_points": 68.04,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 129.02
+      },
+      {
+        "name": "Omarion Hampton",
+        "position": "RB",
+        "projected_points": 59.41,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 46.71
+      },
+      {
+        "name": "Ladd McConkey",
+        "position": "WR",
+        "projected_points": 57.09,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 89.98
+      },
+      {
+        "name": "Aaron Jones Sr.",
+        "position": "RB",
+        "projected_points": 63.8,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 128.65
+      },
+      {
+        "name": "Kyle Pitts Sr.",
+        "position": "TE",
+        "projected_points": 45.99,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 105.85
       },
       {
         "name": "T.J. Hockenson",
         "position": "TE",
         "projected_points": 59.94,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 135.89
-      },
-      {
-        "name": "Jonah Coleman",
-        "position": "RB",
-        "projected_points": 109.65,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 115.44
+        "redraft_adp": 135.87
       },
       {
         "name": "Denzel Boston",
         "position": "WR",
         "projected_points": 71.04,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 144.68
+        "redraft_adp": 144.73
+      },
+      {
+        "name": "Jonah Coleman",
+        "position": "RB",
+        "projected_points": 109.65,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 115.02
       },
       {
         "name": "Woody Marks",
         "position": "RB",
         "projected_points": 64.29,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 150.86
+        "redraft_adp": 151.41
       },
       {
         "name": "Travis Etienne Jr.",
         "position": "RB",
         "projected_points": 76.3,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 82.26
+        "redraft_adp": 82.45
       },
       {
         "name": "Bryce Young",
@@ -23733,56 +23785,56 @@
         "position": "RB",
         "projected_points": 65.12,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 117.45
+        "redraft_adp": 117.46
       },
       {
         "name": "C.J. Stroud",
         "position": "QB",
         "projected_points": 170.94,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 134.47
+        "redraft_adp": 133.82
       },
       {
         "name": "Dalton Kincaid",
         "position": "TE",
         "projected_points": 48.02,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 132.95
-      },
-      {
-        "name": "Braelon Allen",
-        "position": "RB",
-        "projected_points": 49.93,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 152.24
+        "redraft_adp": 133.5
       },
       {
         "name": "Deebo Samuel Sr.",
         "position": "WR",
         "projected_points": 63.5,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 152.87
+        "redraft_adp": 152.94
+      },
+      {
+        "name": "Braelon Allen",
+        "position": "RB",
+        "projected_points": 49.93,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 152.76
+      },
+      {
+        "name": "Rachaad White",
+        "position": "RB",
+        "projected_points": 79.87,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 133.82
       },
       {
         "name": "Dallas Goedert",
         "position": "TE",
         "projected_points": 32.36,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 134.44
-      },
-      {
-        "name": "Rachaad White",
-        "position": "RB",
-        "projected_points": 79.79,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 133.62
+        "redraft_adp": 134.55
       },
       {
         "name": "Jordan Addison",
         "position": "WR",
         "projected_points": 67.95,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 137.4
+        "redraft_adp": 137.19
       },
       {
         "name": "David Montgomery",
@@ -23796,588 +23848,602 @@
         "position": "WR",
         "projected_points": 67.77,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 133.31
+        "redraft_adp": 133.79
+      },
+      {
+        "name": "Josh Downs",
+        "position": "WR",
+        "projected_points": 52.06,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 138.57
+      },
+      {
+        "name": "DeMario Douglas",
+        "position": "WR",
+        "projected_points": 50.62,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 165.03
       },
       {
         "name": "Kyle Monangai",
         "position": "RB",
         "projected_points": 55.14,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 137.93
-      },
-      {
-        "name": "Josh Downs",
-        "position": "WR",
-        "projected_points": 51.82,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 139.25
-      },
-      {
-        "name": "DeMario Douglas",
-        "position": "WR",
-        "projected_points": 51.99,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 165.1
+        "redraft_adp": 138.2
       },
       {
         "name": "Tyler Shough",
         "position": "QB",
-        "projected_points": 142.34,
+        "projected_points": 142.39,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 148.66
-      },
-      {
-        "name": "Tyler Allgeier",
-        "position": "RB",
-        "projected_points": 53.53,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 153.33
+        "redraft_adp": 148.6
       },
       {
         "name": "KC Concepcion",
         "position": "WR",
         "projected_points": 50.33,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 148.26
+        "redraft_adp": 148.02
+      },
+      {
+        "name": "Tyler Allgeier",
+        "position": "RB",
+        "projected_points": 53.53,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 153.8
       },
       {
         "name": "Rico Dowdle",
         "position": "RB",
         "projected_points": 65.8,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 135.32
-      },
-      {
-        "name": "J.K. Dobbins",
-        "position": "RB",
-        "projected_points": 45.69,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 142.67
-      },
-      {
-        "name": "Xavier Worthy",
-        "position": "WR",
-        "projected_points": 46.45,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 152.41
-      },
-      {
-        "name": "Kirk Cousins",
-        "position": "QB",
-        "projected_points": 134.24,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 156.51
+        "redraft_adp": 135.35
       },
       {
         "name": "Germie Bernard",
         "position": "WR",
         "projected_points": 55.77,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 162.63
+        "redraft_adp": 162.61
       },
       {
-        "name": "Tre Tucker",
-        "position": "WR",
-        "projected_points": 47.43,
+        "name": "Kirk Cousins",
+        "position": "QB",
+        "projected_points": 134.25,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 158.11
+        "redraft_adp": 155.98
+      },
+      {
+        "name": "J.K. Dobbins",
+        "position": "RB",
+        "projected_points": 45.69,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 142.78
+      },
+      {
+        "name": "Xavier Worthy",
+        "position": "WR",
+        "projected_points": 46.91,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 152.56
       },
       {
         "name": "Alvin Kamara",
         "position": "RB",
         "projected_points": 52.56,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 162.17
-      },
-      {
-        "name": "Hunter Henry",
-        "position": "TE",
-        "projected_points": 42.3,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 158.53
+        "redraft_adp": 162.29
       },
       {
         "name": "Khalil Shakir",
         "position": "WR",
         "projected_points": 55.16,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 142.62
+        "redraft_adp": 142.69
+      },
+      {
+        "name": "Tre Tucker",
+        "position": "WR",
+        "projected_points": 47.43,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 158.3
+      },
+      {
+        "name": "Hunter Henry",
+        "position": "TE",
+        "projected_points": 41.96,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 158.68
       },
       {
         "name": "Courtland Sutton",
         "position": "WR",
         "projected_points": 51.63,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 128.29
+        "redraft_adp": 128.34
       },
       {
         "name": "Marvin Harrison Jr.",
         "position": "WR",
         "projected_points": 39.77,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 124.85
-      },
-      {
-        "name": "TreVeyon Henderson",
-        "position": "RB",
-        "projected_points": 35.7,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 124.53
-      },
-      {
-        "name": "Bo Nix",
-        "position": "QB",
-        "projected_points": 139.35,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 132.42
+        "redraft_adp": 125.1
       },
       {
         "name": "Omar Cooper Jr.",
         "position": "WR",
         "projected_points": 45.32,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 164.7
+        "redraft_adp": 164.84
+      },
+      {
+        "name": "Bo Nix",
+        "position": "QB",
+        "projected_points": 139.34,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 132.55
       },
       {
         "name": "Jordan Mason",
         "position": "RB",
         "projected_points": 76.53,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 161.46
+        "redraft_adp": 161.3
+      },
+      {
+        "name": "TreVeyon Henderson",
+        "position": "RB",
+        "projected_points": 35.7,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 124.6
       },
       {
         "name": "Mark Andrews",
         "position": "TE",
         "projected_points": 26.44,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 153.83
+        "redraft_adp": 153.88
       },
       {
         "name": "Tank Dell",
         "position": "WR",
         "projected_points": 54.34,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 154.51
-      },
-      {
-        "name": "Wan'Dale Robinson",
-        "position": "WR",
-        "projected_points": 45.11,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 133.86
-      },
-      {
-        "name": "Makai Lemon",
-        "position": "WR",
-        "projected_points": 21.35,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 150.9
-      },
-      {
-        "name": "Keenan Allen",
-        "position": "WR",
-        "projected_points": 34.75,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 162.86
-      },
-      {
-        "name": "Kenny Gainwell",
-        "position": "RB",
-        "projected_points": 59.21,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 132.46
+        "redraft_adp": 154.2
       },
       {
         "name": "Audric Estime",
         "position": "RB",
         "projected_points": 9.28,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.22
+        "redraft_adp": 169.19
+      },
+      {
+        "name": "Wan'Dale Robinson",
+        "position": "WR",
+        "projected_points": 45.11,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 133.95
+      },
+      {
+        "name": "Keenan Allen",
+        "position": "WR",
+        "projected_points": 34.75,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 162.57
+      },
+      {
+        "name": "Makai Lemon",
+        "position": "WR",
+        "projected_points": 21.35,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 150.99
       },
       {
         "name": "Brenton Strange",
         "position": "TE",
         "projected_points": 48.45,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 154.11
+        "redraft_adp": 154.06
+      },
+      {
+        "name": "Kenny Gainwell",
+        "position": "RB",
+        "projected_points": 59.21,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 132.42
       },
       {
         "name": "Devaughn Vele",
         "position": "WR",
         "projected_points": 36.53,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.39
+        "redraft_adp": 167.51
       },
       {
         "name": "Chris Godwin Jr.",
         "position": "WR",
         "projected_points": 33.19,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 147.51
-      },
-      {
-        "name": "Juwan Johnson",
-        "position": "TE",
-        "projected_points": 37.5,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 162.28
+        "redraft_adp": 147.63
       },
       {
         "name": "Jordyn Tyson",
         "position": "WR",
         "projected_points": 44.14,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 163.95
+        "redraft_adp": 163.89
+      },
+      {
+        "name": "Juwan Johnson",
+        "position": "TE",
+        "projected_points": 37.5,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 162.24
       },
       {
         "name": "Corey Kiner",
         "position": "RB",
-        "projected_points": 32.95,
+        "projected_points": 29.66,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.3
+        "redraft_adp": 169.29
       },
       {
         "name": "Pat Freiermuth",
         "position": "TE",
         "projected_points": 48.46,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 164.99
-      },
-      {
-        "name": "Jake Ferguson",
-        "position": "TE",
-        "projected_points": 16.18,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 152.04
+        "redraft_adp": 165.0
       },
       {
         "name": "Adonai Mitchell",
         "position": "WR",
         "projected_points": 58.61,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 166.03
+        "redraft_adp": 166.13
+      },
+      {
+        "name": "Jake Ferguson",
+        "position": "TE",
+        "projected_points": 16.18,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 152.09
       },
       {
         "name": "Aaron Rodgers",
         "position": "QB",
         "projected_points": 141.27,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 163.9
+        "redraft_adp": 163.87
       },
       {
         "name": "Brian Thomas Jr.",
         "position": "WR",
         "projected_points": 38.97,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 142.39
+        "redraft_adp": 142.41
       },
       {
         "name": "Kaelon Black",
         "position": "RB",
         "projected_points": 56.2,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.19
+        "redraft_adp": 167.14
       },
       {
         "name": "Malik Washington",
         "position": "WR",
-        "projected_points": 49.34,
+        "projected_points": 49.29,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.01
+        "redraft_adp": 168.1
       },
       {
         "name": "Caleb Douglas",
         "position": "WR",
-        "projected_points": 51.36,
+        "projected_points": 48.67,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 166.25
-      },
-      {
-        "name": "Justin Herbert",
-        "position": "QB",
-        "projected_points": 103.53,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 133.25
+        "redraft_adp": 166.23
       },
       {
         "name": "MarShawn Lloyd",
         "position": "RB",
         "projected_points": 27.69,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 139.69
+        "redraft_adp": 139.73
+      },
+      {
+        "name": "Justin Herbert",
+        "position": "QB",
+        "projected_points": 103.53,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 133.18
       },
       {
         "name": "Devin Singletary",
         "position": "RB",
-        "projected_points": 46.08,
+        "projected_points": 46.05,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.87
+        "redraft_adp": 168.88
       },
       {
         "name": "J.J. McCarthy",
         "position": "QB",
-        "projected_points": 135.9,
+        "projected_points": 135.48,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 166.01
+        "redraft_adp": 166.0
       },
       {
         "name": "Ryan Flournoy",
         "position": "WR",
-        "projected_points": 37.8,
+        "projected_points": 37.84,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.77
-      },
-      {
-        "name": "Travis Hunter",
-        "position": "WR",
-        "projected_points": 22.61,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 154.48
-      },
-      {
-        "name": "Sam Darnold",
-        "position": "QB",
-        "projected_points": 87.48,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.47
-      },
-      {
-        "name": "Mike Gesicki",
-        "position": "TE",
-        "projected_points": 46.48,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 165.65
-      },
-      {
-        "name": "Quentin Johnston",
-        "position": "WR",
-        "projected_points": 40.13,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 156.46
-      },
-      {
-        "name": "Emmett Johnson",
-        "position": "RB",
-        "projected_points": 39.72,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 166.67
-      },
-      {
-        "name": "Mack Hollins",
-        "position": "WR",
-        "projected_points": 48.08,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.84
-      },
-      {
-        "name": "Dalton Schultz",
-        "position": "TE",
-        "projected_points": 40.29,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.08
-      },
-      {
-        "name": "Mike Washington Jr.",
-        "position": "RB",
-        "projected_points": 53.65,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.62
+        "redraft_adp": 167.8
       },
       {
         "name": "Darren Waller",
         "position": "TE",
         "projected_points": 46.12,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.0
+        "redraft_adp": 167.94
       },
       {
-        "name": "Geno Smith",
-        "position": "QB",
-        "projected_points": 117.77,
+        "name": "Travis Hunter",
+        "position": "WR",
+        "projected_points": 22.61,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.89
+        "redraft_adp": 154.52
+      },
+      {
+        "name": "Mack Hollins",
+        "position": "WR",
+        "projected_points": 47.2,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.86
+      },
+      {
+        "name": "Emmett Johnson",
+        "position": "RB",
+        "projected_points": 39.88,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 166.75
+      },
+      {
+        "name": "Mike Gesicki",
+        "position": "TE",
+        "projected_points": 46.48,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 165.76
+      },
+      {
+        "name": "Quentin Johnston",
+        "position": "WR",
+        "projected_points": 40.13,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 156.5
+      },
+      {
+        "name": "Sam Darnold",
+        "position": "QB",
+        "projected_points": 87.49,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 168.43
+      },
+      {
+        "name": "Dalton Schultz",
+        "position": "TE",
+        "projected_points": 40.29,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 168.05
       },
       {
         "name": "Dylan Sampson",
         "position": "RB",
         "projected_points": 46.32,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.98
+        "redraft_adp": 168.95
       },
       {
-        "name": "Baker Mayfield",
-        "position": "QB",
-        "projected_points": 108.43,
+        "name": "Mike Washington Jr.",
+        "position": "RB",
+        "projected_points": 53.65,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 164.99
+        "redraft_adp": 167.66
+      },
+      {
+        "name": "Geno Smith",
+        "position": "QB",
+        "projected_points": 117.76,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 168.91
       },
       {
         "name": "Rashid Shaheed",
         "position": "WR",
         "projected_points": 35.01,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.81
+        "redraft_adp": 168.67
+      },
+      {
+        "name": "Baker Mayfield",
+        "position": "QB",
+        "projected_points": 108.43,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 164.95
       },
       {
         "name": "Tyjae Spears",
         "position": "RB",
         "projected_points": 37.36,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 165.12
+        "redraft_adp": 165.16
       },
       {
         "name": "Michael Mayer",
         "position": "TE",
         "projected_points": 32.02,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.04
+        "redraft_adp": 169.08
       },
       {
         "name": "Keon Coleman",
         "position": "WR",
         "projected_points": 45.34,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.29
-      },
-      {
-        "name": "Kenyon Sadiq",
-        "position": "TE",
-        "projected_points": 18.13,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.32
-      },
-      {
-        "name": "Antonio Williams",
-        "position": "WR",
-        "projected_points": 46.07,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.64
+        "redraft_adp": 168.26
       },
       {
         "name": "Chris Rodriguez Jr.",
         "position": "RB",
         "projected_points": 52.52,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.5
+        "redraft_adp": 167.55
       },
       {
         "name": "Fernando Mendoza",
         "position": "QB",
-        "projected_points": 125.21,
+        "projected_points": 125.2,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.45
+        "redraft_adp": 167.22
       },
       {
-        "name": "Jacoby Brissett",
-        "position": "QB",
-        "projected_points": 87.89,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.04
-      },
-      {
-        "name": "Chig Okonkwo",
+        "name": "Kenyon Sadiq",
         "position": "TE",
-        "projected_points": 44.82,
+        "projected_points": 18.13,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.59
+        "redraft_adp": 168.35
+      },
+      {
+        "name": "Antonio Williams",
+        "position": "WR",
+        "projected_points": 45.8,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 168.65
       },
       {
         "name": "Drew Lock",
         "position": "QB",
         "projected_points": 17.59,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.47
+        "redraft_adp": 169.49
+      },
+      {
+        "name": "Jacoby Brissett",
+        "position": "QB",
+        "projected_points": 87.9,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 168.95
+      },
+      {
+        "name": "Chig Okonkwo",
+        "position": "TE",
+        "projected_points": 44.57,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 167.52
       },
       {
         "name": "Dontayvion Wicks",
         "position": "WR",
         "projected_points": 43.61,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.7
-      },
-      {
-        "name": "Michael Penix Jr.",
-        "position": "QB",
-        "projected_points": 112.26,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.01
-      },
-      {
-        "name": "Kendre Miller",
-        "position": "RB",
-        "projected_points": 6.79,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.99
-      },
-      {
-        "name": "Seth McGowan",
-        "position": "RB",
-        "projected_points": 35.51,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.16
+        "redraft_adp": 169.67
       },
       {
         "name": "Kaleb Johnson",
         "position": "RB",
         "projected_points": 9.14,
         "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.05
+      },
+      {
+        "name": "Tutu Atwell",
+        "position": "WR",
+        "projected_points": 42.2,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.58
+      },
+      {
+        "name": "Michael Penix Jr.",
+        "position": "QB",
+        "projected_points": 112.27,
+        "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.06
+      },
+      {
+        "name": "Seth McGowan",
+        "position": "RB",
+        "projected_points": 35.51,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.23
       },
       {
         "name": "Terrance Ferguson",
         "position": "TE",
         "projected_points": 33.47,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.49
-      },
-      {
-        "name": "Kimani Vidal",
-        "position": "RB",
-        "projected_points": 51.4,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.7
+        "redraft_adp": 168.42
       },
       {
         "name": "Justice Hill",
         "position": "RB",
         "projected_points": 34.01,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.36
+        "redraft_adp": 168.39
+      },
+      {
+        "name": "Kendre Miller",
+        "position": "RB",
+        "projected_points": 7.12,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.99
+      },
+      {
+        "name": "Kimani Vidal",
+        "position": "RB",
+        "projected_points": 51.4,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.69
       },
       {
         "name": "Daniel Jones",
         "position": "QB",
         "projected_points": 86.47,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.28
-      },
-      {
-        "name": "Tutu Atwell",
-        "position": "WR",
-        "projected_points": 42.24,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.61
-      },
-      {
-        "name": "Malik Willis",
-        "position": "QB",
-        "projected_points": 63.24,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 164.75
+        "redraft_adp": 168.11
       },
       {
         "name": "Deshaun Watson",
         "position": "QB",
         "projected_points": 123.82,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.52
+        "redraft_adp": 169.54
+      },
+      {
+        "name": "AJ Barner",
+        "position": "TE",
+        "projected_points": 39.82,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 168.58
+      },
+      {
+        "name": "Konata Mumpfield",
+        "position": "WR",
+        "projected_points": 43.64,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.65
       },
       {
         "name": "Tyler Higbee",
         "position": "TE",
-        "projected_points": 21.2,
+        "projected_points": 21.18,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.45
+        "redraft_adp": 169.48
+      },
+      {
+        "name": "Malik Willis",
+        "position": "QB",
+        "projected_points": 63.23,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 164.89
       },
       {
         "name": "Keaton Mitchell",
@@ -24387,60 +24453,46 @@
         "redraft_adp": 169.55
       },
       {
-        "name": "Konata Mumpfield",
+        "name": "Malachi Fields",
         "position": "WR",
-        "projected_points": 43.66,
+        "projected_points": 55.87,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.65
+        "redraft_adp": 168.88
       },
       {
         "name": "Samaje Perine",
         "position": "RB",
         "projected_points": 50.5,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.72
+        "redraft_adp": 168.67
       },
       {
-        "name": "AJ Barner",
+        "name": "Eli Raridon",
         "position": "TE",
-        "projected_points": 39.82,
+        "projected_points": 42.05,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.64
+        "redraft_adp": 169.85
       },
       {
         "name": "Cooper Kupp",
         "position": "WR",
         "projected_points": 25.01,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.47
-      },
-      {
-        "name": "Eli Raridon",
-        "position": "TE",
-        "projected_points": 42.87,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.82
+        "redraft_adp": 167.43
       },
       {
         "name": "Rashod Bateman",
         "position": "WR",
         "projected_points": 23.6,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.35
-      },
-      {
-        "name": "Malachi Fields",
-        "position": "WR",
-        "projected_points": 56.0,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.98
+        "redraft_adp": 169.37
       },
       {
         "name": "Treylon Burks",
         "position": "WR",
-        "projected_points": 61.13,
+        "projected_points": 60.85,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.71
+        "redraft_adp": 169.69
       },
       {
         "name": "Jerry Jeudy",
@@ -24454,12 +24506,19 @@
         "position": "WR",
         "projected_points": 8.43,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.89
+        "redraft_adp": 169.88
+      },
+      {
+        "name": "Austin Ekeler",
+        "position": "RB",
+        "projected_points": 64.22,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.8
       },
       {
         "name": "Elijah Mitchell",
         "position": "RB",
-        "projected_points": 28.69,
+        "projected_points": 28.86,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.96
       },
@@ -24468,7 +24527,7 @@
         "position": "WR",
         "projected_points": 28.21,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.37
+        "redraft_adp": 169.38
       },
       {
         "name": "Ja'Kobi Lane",
@@ -24482,42 +24541,35 @@
         "position": "RB",
         "projected_points": 22.93,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.94
+        "redraft_adp": 169.95
       },
       {
         "name": "Demarcus Robinson",
         "position": "WR",
         "projected_points": 7.76,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.49
+        "redraft_adp": 169.51
       },
       {
         "name": "Mason Taylor",
         "position": "TE",
         "projected_points": 38.06,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.7
-      },
-      {
-        "name": "Austin Ekeler",
-        "position": "RB",
-        "projected_points": 64.13,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.83
+        "redraft_adp": 169.72
       },
       {
         "name": "Darnell Washington",
         "position": "TE",
         "projected_points": 49.26,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 167.63
+        "redraft_adp": 167.67
       },
       {
         "name": "Calvin Ridley",
         "position": "WR",
         "projected_points": 17.94,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.65
+        "redraft_adp": 169.68
       },
       {
         "name": "Cam Ward",
@@ -24536,30 +24588,9 @@
       {
         "name": "Colby Parkinson",
         "position": "TE",
-        "projected_points": 31.72,
+        "projected_points": 31.74,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.75
-      },
-      {
-        "name": "Kayshon Boutte",
-        "position": "WR",
-        "projected_points": 31.38,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.39
-      },
-      {
-        "name": "Greg Dulcich",
-        "position": "TE",
-        "projected_points": 39.11,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.67
-      },
-      {
-        "name": "Jameis Winston",
-        "position": "QB",
-        "projected_points": 5.68,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.72
+        "redraft_adp": 169.77
       },
       {
         "name": "Xavier Hutchinson",
@@ -24569,39 +24600,60 @@
         "redraft_adp": 169.77
       },
       {
-        "name": "Tez Johnson",
+        "name": "Kayshon Boutte",
         "position": "WR",
-        "projected_points": 38.98,
+        "projected_points": 31.38,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.91
+        "redraft_adp": 169.38
+      },
+      {
+        "name": "Jameis Winston",
+        "position": "QB",
+        "projected_points": 5.67,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.72
+      },
+      {
+        "name": "Greg Dulcich",
+        "position": "TE",
+        "projected_points": 39.09,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.7
       },
       {
         "name": "Jalen Nailor",
         "position": "WR",
         "projected_points": 35.52,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.62
+        "redraft_adp": 169.63
       },
       {
-        "name": "Ted Hurst III",
+        "name": "Tez Johnson",
         "position": "WR",
-        "projected_points": 16.97,
+        "projected_points": 38.98,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 170.03
-      },
-      {
-        "name": "George Holani",
-        "position": "RB",
-        "projected_points": 0.04,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.88
+        "redraft_adp": 169.92
       },
       {
         "name": "Jordan Watkins",
         "position": "WR",
         "projected_points": 2.87,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.43
+        "redraft_adp": 169.44
+      },
+      {
+        "name": "George Holani",
+        "position": "RB",
+        "projected_points": 0.04,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.87
+      },
+      {
+        "name": "Ted Hurst III",
+        "position": "WR",
+        "projected_points": 16.97,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 170.04
       },
       {
         "name": "Pierre Strong Jr.",
@@ -24611,9 +24663,16 @@
         "redraft_adp": 169.59
       },
       {
+        "name": "Ray Davis",
+        "position": "RB",
+        "projected_points": 12.94,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 168.63
+      },
+      {
         "name": "Efton Chism III",
         "position": "WR",
-        "projected_points": 12.9,
+        "projected_points": 9.28,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.81
       },
@@ -24622,19 +24681,12 @@
         "position": "QB",
         "projected_points": 103.26,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.47
-      },
-      {
-        "name": "Ray Davis",
-        "position": "RB",
-        "projected_points": 12.94,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 168.64
+        "redraft_adp": 169.48
       },
       {
         "name": "Jaylen Wright",
         "position": "RB",
-        "projected_points": 25.14,
+        "projected_points": 25.13,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.62
       },
@@ -24643,35 +24695,35 @@
         "position": "RB",
         "projected_points": 31.0,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.05
-      },
-      {
-        "name": "Cade Otton",
-        "position": "TE",
-        "projected_points": 38.0,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.77
+        "redraft_adp": 169.07
       },
       {
         "name": "Jauan Jennings",
         "position": "WR",
         "projected_points": 24.99,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.4
+        "redraft_adp": 169.38
       },
       {
         "name": "Dohnte Meyers",
         "position": "WR",
         "projected_points": 31.07,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.38
+        "redraft_adp": 169.34
+      },
+      {
+        "name": "Cade Otton",
+        "position": "TE",
+        "projected_points": 38.0,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.78
       },
       {
         "name": "Tre' Harris",
         "position": "WR",
         "projected_points": 33.66,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.81
+        "redraft_adp": 169.8
       },
       {
         "name": "Pat Bryant",
@@ -24685,70 +24737,70 @@
         "position": "TE",
         "projected_points": 27.28,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.56
-      },
-      {
-        "name": "Gunnar Helm",
-        "position": "TE",
-        "projected_points": 29.86,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.84
-      },
-      {
-        "name": "Isaac TeSlaa",
-        "position": "WR",
-        "projected_points": 28.87,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.26
-      },
-      {
-        "name": "Oronde Gadsden",
-        "position": "TE",
-        "projected_points": 33.82,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.9
+        "redraft_adp": 169.54
       },
       {
         "name": "Carson Beck",
         "position": "QB",
         "projected_points": 101.31,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.62
+        "redraft_adp": 169.6
       },
       {
-        "name": "Chris Bell",
-        "position": "WR",
-        "projected_points": 30.78,
+        "name": "Gunnar Helm",
+        "position": "TE",
+        "projected_points": 29.86,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.84
+        "redraft_adp": 169.83
+      },
+      {
+        "name": "Isaac TeSlaa",
+        "position": "WR",
+        "projected_points": 28.87,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.28
+      },
+      {
+        "name": "Oronde Gadsden",
+        "position": "TE",
+        "projected_points": 33.82,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.91
       },
       {
         "name": "Reggie Virgil",
         "position": "WR",
         "projected_points": 41.47,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.83
+        "redraft_adp": 169.81
+      },
+      {
+        "name": "Chris Bell",
+        "position": "WR",
+        "projected_points": 30.8,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.86
       },
       {
         "name": "Zachariah Branch",
         "position": "WR",
         "projected_points": 10.12,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.73
+        "redraft_adp": 169.7
       },
       {
         "name": "Sione Vaki",
         "position": "RB",
         "projected_points": 31.37,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.47
+        "redraft_adp": 169.5
       },
       {
         "name": "Chimere Dike",
         "position": "WR",
         "projected_points": 9.81,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.77
+        "redraft_adp": 169.78
       },
       {
         "name": "Savion Williams",
@@ -24758,11 +24810,11 @@
         "redraft_adp": 169.2
       },
       {
-        "name": "KaVontae Turpin",
-        "position": "WR",
-        "projected_points": 12.62,
+        "name": "Kyle McCord",
+        "position": "QB",
+        "projected_points": 41.62,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.79
+        "redraft_adp": 169.86
       },
       {
         "name": "Laquon Treadwell",
@@ -24772,30 +24824,44 @@
         "redraft_adp": 169.95
       },
       {
-        "name": "Kyle McCord",
-        "position": "QB",
-        "projected_points": 41.63,
+        "name": "KaVontae Turpin",
+        "position": "WR",
+        "projected_points": 12.62,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.88
+        "redraft_adp": 169.78
       },
       {
         "name": "Kyle Williams",
         "position": "WR",
-        "projected_points": 21.43,
+        "projected_points": 19.03,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.89
+        "redraft_adp": 169.91
+      },
+      {
+        "name": "Darnell Mooney",
+        "position": "WR",
+        "projected_points": 38.72,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.68
       },
       {
         "name": "Tyler Goodson",
         "position": "RB",
         "projected_points": 22.66,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.64
+        "redraft_adp": 169.66
       },
       {
-        "name": "Darnell Mooney",
+        "name": "CJ Daniels",
         "position": "WR",
-        "projected_points": 38.82,
+        "projected_points": 28.43,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.9
+      },
+      {
+        "name": "Myles Price",
+        "position": "WR",
+        "projected_points": 6.71,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.72
       },
@@ -24807,16 +24873,9 @@
         "redraft_adp": 169.85
       },
       {
-        "name": "Myles Price",
-        "position": "WR",
-        "projected_points": 6.71,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.72
-      },
-      {
         "name": "Dawson Knox",
         "position": "TE",
-        "projected_points": 25.55,
+        "projected_points": 25.54,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.03
       },
@@ -24825,21 +24884,14 @@
         "position": "RB",
         "projected_points": 0.05,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.67
-      },
-      {
-        "name": "CJ Daniels",
-        "position": "WR",
-        "projected_points": 28.44,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.91
+        "redraft_adp": 169.68
       },
       {
         "name": "Tory Horton",
         "position": "WR",
         "projected_points": 17.52,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.95
+        "redraft_adp": 169.97
       },
       {
         "name": "Tommy Tremble",
@@ -24853,7 +24905,14 @@
         "position": "WR",
         "projected_points": 12.92,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.68
+        "redraft_adp": 169.69
+      },
+      {
+        "name": "Kyle Juszczyk",
+        "position": "RB",
+        "projected_points": 12.55,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.51
       },
       {
         "name": "Isaiah Williams",
@@ -24863,53 +24922,60 @@
         "redraft_adp": 169.91
       },
       {
-        "name": "Kyle Juszczyk",
-        "position": "RB",
-        "projected_points": 12.55,
+        "name": "Devin Duvernay",
+        "position": "WR",
+        "projected_points": 21.91,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.52
+        "redraft_adp": 169.92
       },
       {
         "name": "Jacob Saylors",
         "position": "RB",
         "projected_points": 0.3,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.79
+        "redraft_adp": 169.81
       },
       {
-        "name": "Devin Duvernay",
-        "position": "WR",
-        "projected_points": 21.91,
+        "name": "Emari Demercado",
+        "position": "RB",
+        "projected_points": 4.17,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.93
-      },
-      {
-        "name": "Jalen Royals",
-        "position": "WR",
-        "projected_points": 0.1,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.71
+        "redraft_adp": 170.01
       },
       {
         "name": "Dylan Laube",
         "position": "RB",
         "projected_points": 0.92,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.9
+        "redraft_adp": 169.91
+      },
+      {
+        "name": "Jalen Royals",
+        "position": "WR",
+        "projected_points": 0.21,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.7
+      },
+      {
+        "name": "Brevyn Spann-Ford",
+        "position": "TE",
+        "projected_points": 17.45,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.73
       },
       {
         "name": "Sean Tucker",
         "position": "RB",
         "projected_points": 0.07,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.9
+        "redraft_adp": 169.89
       },
       {
-        "name": "Brevyn Spann-Ford",
-        "position": "TE",
-        "projected_points": 17.43,
+        "name": "Lan Larison",
+        "position": "RB",
+        "projected_points": 1.64,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.73
+        "redraft_adp": 169.94
       },
       {
         "name": "Troy Franklin",
@@ -24919,116 +24985,109 @@
         "redraft_adp": 169.9
       },
       {
-        "name": "Lan Larison",
+        "name": "Khalil Herbert",
         "position": "RB",
-        "projected_points": 4.8,
+        "projected_points": 21.16,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.94
+        "redraft_adp": 169.86
       },
       {
         "name": "Jack Bech",
         "position": "WR",
         "projected_points": 13.6,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 170.07
-      },
-      {
-        "name": "Olamide Zaccheaus",
-        "position": "WR",
-        "projected_points": 15.55,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.83
-      },
-      {
-        "name": "Emari Demercado",
-        "position": "RB",
-        "projected_points": 4.17,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 170.0
+        "redraft_adp": 170.06
       },
       {
         "name": "LeQuint Allen Jr.",
         "position": "RB",
         "projected_points": 6.44,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.78
-      },
-      {
-        "name": "Khalil Herbert",
-        "position": "RB",
-        "projected_points": 21.16,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.87
+        "redraft_adp": 169.79
       },
       {
         "name": "Trevor Etienne",
         "position": "RB",
         "projected_points": 19.25,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.82
+        "redraft_adp": 169.81
+      },
+      {
+        "name": "Olamide Zaccheaus",
+        "position": "WR",
+        "projected_points": 15.55,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.8
       },
       {
         "name": "Elic Ayomanor",
         "position": "WR",
         "projected_points": 38.65,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.91
+        "redraft_adp": 169.9
       },
       {
         "name": "Eli Stowers",
         "position": "TE",
         "projected_points": 5.98,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.97
+        "redraft_adp": 170.0
       },
       {
         "name": "Noah Gray",
         "position": "TE",
         "projected_points": 17.09,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.54
+        "redraft_adp": 169.6
+      },
+      {
+        "name": "Van Jefferson",
+        "position": "WR",
+        "projected_points": 26.82,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.9
       },
       {
         "name": "Jacob Cowing",
         "position": "WR",
         "projected_points": 0.97,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.77
+        "redraft_adp": 169.76
       },
       {
         "name": "Noah Fant",
         "position": "TE",
         "projected_points": 17.13,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.92
-      },
-      {
-        "name": "Van Jefferson",
-        "position": "WR",
-        "projected_points": 26.95,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.92
+        "redraft_adp": 169.91
       },
       {
         "name": "Kaden Wetjen",
         "position": "WR",
         "projected_points": 1.53,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.9
+        "redraft_adp": 169.91
       },
       {
         "name": "Ashton Dulin",
         "position": "WR",
         "projected_points": 21.27,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.96
+        "redraft_adp": 169.95
       },
       {
         "name": "Kevin Coleman Jr.",
         "position": "WR",
-        "projected_points": 29.21,
+        "projected_points": 31.98,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.97
+        "redraft_adp": 169.98
+      },
+      {
+        "name": "Deion Burks",
+        "position": "WR",
+        "projected_points": 28.45,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.9
       },
       {
         "name": "Barion Brown",
@@ -25040,51 +25099,44 @@
       {
         "name": "Luke McCaffrey",
         "position": "WR",
-        "projected_points": 4.14,
+        "projected_points": 4.13,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.82
+        "redraft_adp": 169.79
       },
       {
         "name": "Brycen Tremayne",
         "position": "WR",
         "projected_points": 13.12,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.88
-      },
-      {
-        "name": "Theo Johnson",
-        "position": "TE",
-        "projected_points": 5.71,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.85
-      },
-      {
-        "name": "Tahj Brooks",
-        "position": "RB",
-        "projected_points": 0.11,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.72
-      },
-      {
-        "name": "Deion Burks",
-        "position": "WR",
-        "projected_points": 28.45,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.9
-      },
-      {
-        "name": "Josh Cameron",
-        "position": "WR",
-        "projected_points": 26.2,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.87
+        "redraft_adp": 169.86
       },
       {
         "name": "Kene Nwangwu",
         "position": "RB",
         "projected_points": 1.5,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.99
+        "redraft_adp": 170.01
+      },
+      {
+        "name": "Theo Johnson",
+        "position": "TE",
+        "projected_points": 5.7,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.82
+      },
+      {
+        "name": "Tahj Brooks",
+        "position": "RB",
+        "projected_points": 0.11,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.71
+      },
+      {
+        "name": "Josh Cameron",
+        "position": "WR",
+        "projected_points": 26.2,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.83
       },
       {
         "name": "Dare Ogunbowale",
@@ -25098,42 +25150,42 @@
         "position": "RB",
         "projected_points": 0.18,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.97
-      },
-      {
-        "name": "Hunter Luepke",
-        "position": "RB",
-        "projected_points": 4.2,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.79
-      },
-      {
-        "name": "Bryce Lance",
-        "position": "WR",
-        "projected_points": 8.29,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 170.0
-      },
-      {
-        "name": "Charlie Jones",
-        "position": "WR",
-        "projected_points": 2.52,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.92
-      },
-      {
-        "name": "Luke Schoonmaker",
-        "position": "TE",
-        "projected_points": 2.62,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.76
+        "redraft_adp": 169.98
       },
       {
         "name": "Ameer Abdullah",
         "position": "RB",
         "projected_points": 0.26,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.87
+        "redraft_adp": 169.85
+      },
+      {
+        "name": "Hunter Luepke",
+        "position": "RB",
+        "projected_points": 4.2,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.78
+      },
+      {
+        "name": "Bryce Lance",
+        "position": "WR",
+        "projected_points": 8.29,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.99
+      },
+      {
+        "name": "Charlie Jones",
+        "position": "WR",
+        "projected_points": 2.52,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.9
+      },
+      {
+        "name": "Luke Schoonmaker",
+        "position": "TE",
+        "projected_points": 2.63,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.76
       },
       {
         "name": "Greg Dortch",
@@ -25141,6 +25193,13 @@
         "projected_points": 0.92,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.8
+      },
+      {
+        "name": "Bo Melton",
+        "position": "WR",
+        "projected_points": 8.6,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.59
       },
       {
         "name": "John Metchie III",
@@ -25154,26 +25213,26 @@
         "position": "TE",
         "projected_points": 21.03,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.75
+        "redraft_adp": 169.74
       },
       {
         "name": "Jonathan Mingo",
         "position": "WR",
-        "projected_points": 2.52,
+        "projected_points": 2.53,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.82
+        "redraft_adp": 169.81
       },
       {
         "name": "Devontez Walker",
         "position": "WR",
         "projected_points": 4.45,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.95
+        "redraft_adp": 169.96
       },
       {
         "name": "Davis Allen",
         "position": "TE",
-        "projected_points": 11.36,
+        "projected_points": 11.37,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.9
       },
@@ -25182,14 +25241,7 @@
         "position": "TE",
         "projected_points": 19.52,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.81
-      },
-      {
-        "name": "Bo Melton",
-        "position": "WR",
-        "projected_points": 8.6,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.61
+        "redraft_adp": 169.82
       },
       {
         "name": "Sam Roush",
@@ -25203,7 +25255,7 @@
         "position": "TE",
         "projected_points": 2.57,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.63
+        "redraft_adp": 169.62
       },
       {
         "name": "Charlie Kolar",
@@ -25217,14 +25269,14 @@
         "position": "TE",
         "projected_points": 8.6,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.94
+        "redraft_adp": 169.93
       },
       {
         "name": "Drew Sample",
         "position": "TE",
         "projected_points": 9.34,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.64
+        "redraft_adp": 169.65
       },
       {
         "name": "LaJohntay Wester",
@@ -25238,28 +25290,28 @@
         "position": "WR",
         "projected_points": 27.82,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.94
+        "redraft_adp": 169.95
       },
       {
         "name": "Malik Benson",
         "position": "WR",
         "projected_points": 0.75,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 170.02
+        "redraft_adp": 170.01
       },
       {
         "name": "Patrick Ricard",
         "position": "RB",
         "projected_points": 1.84,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.78
+        "redraft_adp": 169.75
       },
       {
         "name": "Adam Trautman",
         "position": "TE",
         "projected_points": 10.86,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.85
+        "redraft_adp": 169.86
       },
       {
         "name": "Jackson Hawes",
@@ -25273,21 +25325,28 @@
         "position": "RB",
         "projected_points": 13.32,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.85
+        "redraft_adp": 169.84
       },
       {
         "name": "DeeJay Dallas",
         "position": "RB",
         "projected_points": 8.08,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.85
+        "redraft_adp": 169.83
       },
       {
         "name": "Colbie Young",
         "position": "WR",
         "projected_points": 3.9,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.74
+        "redraft_adp": 169.73
+      },
+      {
+        "name": "Ronnie Rivers",
+        "position": "RB",
+        "projected_points": 1.34,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.83
       },
       {
         "name": "Foster Moreau",
@@ -25297,32 +25356,25 @@
         "redraft_adp": 169.91
       },
       {
-        "name": "Nikko Remigio",
-        "position": "WR",
-        "projected_points": 0.96,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.95
-      },
-      {
         "name": "Oscar Delp",
         "position": "TE",
         "projected_points": 5.0,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.91
+        "redraft_adp": 169.9
       },
       {
         "name": "Mo Alie-Cox",
         "position": "TE",
         "projected_points": 6.72,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.94
+        "redraft_adp": 169.95
       },
       {
         "name": "Matt Hibner",
         "position": "TE",
         "projected_points": 10.66,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.93
+        "redraft_adp": 169.92
       },
       {
         "name": "Johnny Mundt",
@@ -25332,6 +25384,48 @@
         "redraft_adp": 169.95
       },
       {
+        "name": "Xavier Smith",
+        "position": "WR",
+        "projected_points": 17.31,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.92
+      },
+      {
+        "name": "Josh Cuevas",
+        "position": "TE",
+        "projected_points": 13.21,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.89
+      },
+      {
+        "name": "Anthony Gould",
+        "position": "WR",
+        "projected_points": 22.65,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.97
+      },
+      {
+        "name": "Will Kacmarek",
+        "position": "TE",
+        "projected_points": 9.58,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.95
+      },
+      {
+        "name": "Blake Whiteheart",
+        "position": "TE",
+        "projected_points": 3.79,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.92
+      },
+      {
+        "name": "Luke Farrell",
+        "position": "TE",
+        "projected_points": 8.28,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.79
+      },
+      {
         "name": "Malachi Corley",
         "position": "WR",
         "projected_points": 2.04,
@@ -25339,53 +25433,11 @@
         "redraft_adp": 169.97
       },
       {
-        "name": "Ronnie Rivers",
-        "position": "RB",
-        "projected_points": 1.23,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.84
-      },
-      {
-        "name": "Xavier Smith",
-        "position": "WR",
-        "projected_points": 17.24,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.93
-      },
-      {
-        "name": "Josh Cuevas",
-        "position": "TE",
-        "projected_points": 13.21,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.91
-      },
-      {
-        "name": "Will Kacmarek",
-        "position": "TE",
-        "projected_points": 9.59,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.94
-      },
-      {
-        "name": "Blake Whiteheart",
-        "position": "TE",
-        "projected_points": 3.79,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.91
-      },
-      {
-        "name": "Luke Farrell",
-        "position": "TE",
-        "projected_points": 8.28,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.78
-      },
-      {
         "name": "Ben Skowronek",
         "position": "WR",
         "projected_points": 14.93,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.87
+        "redraft_adp": 169.88
       },
       {
         "name": "Mitchell Evans",
@@ -25399,14 +25451,7 @@
         "position": "TE",
         "projected_points": 8.47,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.83
-      },
-      {
-        "name": "Anthony Gould",
-        "position": "WR",
-        "projected_points": 22.52,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.97
+        "redraft_adp": 169.84
       },
       {
         "name": "Kameron Johnson",
@@ -25420,7 +25465,7 @@
         "position": "TE",
         "projected_points": 4.09,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.95
+        "redraft_adp": 169.94
       },
       {
         "name": "Derius Davis",
@@ -25434,7 +25479,7 @@
         "position": "WR",
         "projected_points": 8.05,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.85
+        "redraft_adp": 169.83
       },
       {
         "name": "Britain Covey",
@@ -25462,35 +25507,28 @@
         "position": "TE",
         "projected_points": 5.96,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.93
+        "redraft_adp": 169.92
       },
       {
         "name": "Anthony Tyus III",
         "position": "RB",
         "projected_points": 0.38,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.61
+        "redraft_adp": 169.6
       },
       {
         "name": "KeAndre Lambert-Smith",
         "position": "WR",
         "projected_points": 2.23,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.92
+        "redraft_adp": 169.91
       },
       {
         "name": "Daniel Bellinger",
         "position": "TE",
         "projected_points": 12.29,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.9
-      },
-      {
-        "name": "Teagan Quitoriano",
-        "position": "TE",
-        "projected_points": 7.86,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.96
+        "redraft_adp": 169.89
       },
       {
         "name": "Nick Westbrook-Ikhine",
@@ -25511,40 +25549,40 @@
         "position": "WR",
         "projected_points": 4.08,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.95
+        "redraft_adp": 169.96
       },
       {
         "name": "Ian Thomas",
         "position": "TE",
         "projected_points": 2.37,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.97
+        "redraft_adp": 169.96
       },
       {
         "name": "Charlie Woerner",
         "position": "TE",
         "projected_points": 7.77,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.91
+        "redraft_adp": 169.92
       },
       {
         "name": "Dareke Young",
         "position": "WR",
         "projected_points": 0.1,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.96
+        "redraft_adp": 169.95
       },
       {
         "name": "Coleman Owen",
         "position": "WR",
         "projected_points": 1.06,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.71
+        "redraft_adp": 169.72
       },
       {
         "name": "John Bates",
         "position": "TE",
-        "projected_points": 5.64,
+        "projected_points": 5.61,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.86
       },
@@ -25560,35 +25598,42 @@
         "position": "TE",
         "projected_points": 5.4,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.59
+        "redraft_adp": 169.58
+      },
+      {
+        "name": "Teagan Quitoriano",
+        "position": "TE",
+        "projected_points": 7.86,
+        "projection_provider": "ESPN 2026 PPR",
+        "redraft_adp": 169.96
       },
       {
         "name": "DeAndre Carter",
         "position": "WR",
         "projected_points": 0.97,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.83
+        "redraft_adp": 169.81
       },
       {
         "name": "Jack Endries",
         "position": "TE",
         "projected_points": 11.23,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.95
+        "redraft_adp": 169.94
       },
       {
         "name": "Payne Durham",
         "position": "TE",
         "projected_points": 2.09,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.89
+        "redraft_adp": 169.9
       },
       {
         "name": "Ben Yurosek",
         "position": "TE",
         "projected_points": 11.29,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.92
+        "redraft_adp": 169.91
       },
       {
         "name": "Drew Ogletree",
@@ -25607,7 +25652,7 @@
       {
         "name": "Colson Yankoff",
         "position": "TE",
-        "projected_points": 2.66,
+        "projected_points": 2.65,
         "projection_provider": "ESPN 2026 PPR",
         "redraft_adp": 169.96
       },
@@ -25616,35 +25661,28 @@
         "position": "WR",
         "projected_points": 11.58,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.95
+        "redraft_adp": 169.96
       },
       {
         "name": "Jake Briningstool",
         "position": "TE",
         "projected_points": 2.67,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.89
-      },
-      {
-        "name": "Terrell Jennings",
-        "position": "RB",
-        "projected_points": 3.07,
-        "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.99
+        "redraft_adp": 169.88
       },
       {
         "name": "Brevin Jordan",
         "position": "TE",
         "projected_points": 3.04,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.98
+        "redraft_adp": 169.99
       },
       {
         "name": "Harrison Wallace III",
         "position": "WR",
         "projected_points": 19.59,
         "projection_provider": "ESPN 2026 PPR",
-        "redraft_adp": 169.72
+        "redraft_adp": 169.7
       },
       {
         "ceiling_points": 196.0,
@@ -25656,7 +25694,7 @@
         "projection_provider": "Draft Sharks 3D projections",
         "redraft_adp": 0.0,
         "redraft_rank": 10,
-        "redraft_value": 68.0
+        "redraft_value": 69.0
       }
     ],
     "source": [
@@ -25666,7 +25704,7 @@
     ],
     "source_type": "Draft Sharks preferred; ESPN broad-coverage fallback; FantasyPros cross-check",
     "status": "ok",
-    "updated_at": "2026-11-12T19:54:16.872381+00:00"
+    "updated_at": "2026-11-13T06:45:58.102016+00:00"
   },
   "snapshot_version": 1,
   "source_api": "https://fastapi-python-boilerplate-six-sandy-58.vercel.app",
@@ -25678,15 +25716,15 @@
         "KTC market values",
         "draft-pick counts"
       ],
-      "projected_players_available": 365,
+      "projected_players_available": 363,
       "projection_cache": {
-        "fetched_at": "2026-11-12T19:54:16.872381+00:00",
+        "fetched_at": "2026-11-13T06:45:58.102016+00:00",
         "refresh_interval_hours": 6,
         "status": "hit"
       },
       "projection_source": "Draft Sharks preferred; ESPN broad-coverage fallback; FantasyPros cross-check",
       "projection_source_status": "ok",
-      "projection_updated_at": "2026-11-12T19:54:16.872381+00:00",
+      "projection_updated_at": "2026-11-13T06:45:58.102016+00:00",
       "sourced_context": [
         "4for4 offensive line",
         "FFToolbox SOS W1-13/W1-17"
@@ -25887,6 +25925,6 @@
         "roster_id": 11
       }
     ],
-    "updated_at": "2026-11-12T19:54:18.602301+00:00"
+    "updated_at": "2026-11-13T06:46:00.130180+00:00"
   }
 }
